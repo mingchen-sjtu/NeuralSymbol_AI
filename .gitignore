@@ -1,0 +1,7 @@
+./NeuralSymbol_AI/build/
+./NeuralSymbol_AI/devel/
+*.pyc
+*.csv
+*.png
+./.idea/
+.vscode/

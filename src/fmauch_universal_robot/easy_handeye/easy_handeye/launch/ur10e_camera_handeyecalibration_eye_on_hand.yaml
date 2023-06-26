@@ -1,0 +1,18 @@
+parameters:
+  eye_on_hand: true
+  freehand_robot_movement: false
+  move_group: manipulator
+  move_group_namespace: /
+  namespace: /ur10e_camera_handeyecalibration_eye_on_hand/
+  robot_base_frame: base_link
+  robot_effector_frame: tool0_controller
+  tracking_base_frame: camera_link
+  tracking_marker_frame: camera_marker
+transformation:
+  qw: 0.7125185111972632
+  qx: -0.023408755679533873
+  qy: 0.03867619371639508
+  qz: -0.700195368021228
+  x: -0.19615149701149315
+  y: 0.01033882718363609
+  z: -0.49392914044205516

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur10e_robot">
+
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro"/>
+  <xacro:ur10e_robot prefix="" />
+  <!-- <xacro:include filename="$(find ur_description)/urdf/battery_pack_sleeve/endeffector.urdf.xacro" /> -->
+  <xacro:include filename="$(find end_effector)/urdf/end_effector.urdf" />
+  <link name="ground_plane_box">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="3 3 0.05"/>
+        </geometry>
+        <material name="Grey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="3 3 0.05"/>
+        </geometry>
+      </collision>
+  </link>
+  <joint name="ground_plane_box" type="fixed">
+      <parent link="base" />
+      <child link="ground_plane_box" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="ur_socket_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0  -1.57   0  " />
+    <parent link="tool0"/>
+    <child link="pneumatic_base_link"/>
+  </joint>
+
+</robot>

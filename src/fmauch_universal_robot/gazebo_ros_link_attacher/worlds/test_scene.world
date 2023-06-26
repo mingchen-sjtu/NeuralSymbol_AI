@@ -1,0 +1,2173 @@
+<sdf version='1.6'>
+  <world name='default'>
+    <plugin name='ros_link_attacher_plugin' filename='libgazebo_ros_link_attacher.so'/>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>65535</collide_bitmask>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <audio>
+      <device>default</device>
+    </audio>
+    <wind/>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='hexagon_bolt_sleeve'>
+      <link name='hexagon_bolt_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 -0 0 0 -0 0</pose>
+          <mass>0.011735</mass>
+          <inertia>
+            <ixx>7.5362e-07</ixx>
+            <ixy>3.6954e-13</ixy>
+            <ixz>1.3504e-13</ixz>
+            <iyy>1.4944e-06</iyy>
+            <iyz>-1.8927e-13</iyz>
+            <izz>1.4944e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='hexagon_bolt_sleeve_base_link_collision'>
+          <pose frame=''>0.0043 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <cylinder>
+              <length>0.054</length>
+              <radius>0.011</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='hexagon_bolt_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/hexagon_sleeve/meshes/hexagon_sleeve_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.42466 0.025289 0.356438 -0.411018 1.5663 3.10769</pose>
+    </model>
+    <model name='robot'>
+      <link name='base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.00043 1.01139 -0.071492 0 -0 0</pose>
+          <mass>682.455</mass>
+          <inertia>
+            <ixx>291.717</ixx>
+            <ixy>0.367271</ixy>
+            <ixz>0.0354715</ixz>
+            <iyy>80.7819</iyy>
+            <iyz>-4.91939</iyz>
+            <izz>364.612</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_inertia_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/base.stl</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__battery_pack_base_link_collision_1'>
+          <pose frame=''>0 0 0.002 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/battery_pack_base_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__M10_gasket_1_link_collision_2'>
+          <pose frame=''>0.196 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M10_gasket_1_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__M10_gasket_2_link_collision_3'>
+          <pose frame=''>0.296 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M10_gasket_2_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__M6_gasket_1_link_collision_4'>
+          <pose frame=''>-0.404 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M6_gasket_1_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__M6_gasket_2_link_collision_5'>
+          <pose frame=''>-0.304 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M6_gasket_2_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__M8_gasket_1_link_collision_6'>
+          <pose frame=''>-0.104 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M8_gasket_1_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__M8_gasket_2_link_collision_7'>
+          <pose frame=''>-0.004 0.5215 0.0545 3.14159 -0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M8_gasket_2_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__battery_link_collision_8'>
+          <pose frame=''>-0.504 0.504 0.042 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/battery_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='base_link_fixed_joint_lump__sleeve_plate_link_collision_9'>
+          <pose frame=''>0.45 0 0.067 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/sleeve_plate_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='base_link_inertia_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/base.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__battery_pack_base_link_visual_1'>
+          <pose frame=''>0 0 0.002 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/battery_pack_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__M10_gasket_1_link_visual_2'>
+          <pose frame=''>0.196 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M10_gasket_1_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__M10_gasket_2_link_visual_3'>
+          <pose frame=''>0.296 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M10_gasket_2_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__M6_gasket_1_link_visual_4'>
+          <pose frame=''>-0.404 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M6_gasket_1_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__M6_gasket_2_link_visual_5'>
+          <pose frame=''>-0.304 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M6_gasket_2_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__M8_gasket_1_link_visual_6'>
+          <pose frame=''>-0.104 0.5215 0.0545 -3.14159 0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M8_gasket_1_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__M8_gasket_2_link_visual_7'>
+          <pose frame=''>-0.004 0.5215 0.0545 3.14159 -0 1.96389</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/M8_gasket_2_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__battery_link_visual_8'>
+          <pose frame=''>-0.504 0.504 0.042 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/battery_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_link_fixed_joint_lump__sleeve_plate_link_visual_9'>
+          <pose frame=''>0.45 0 0.067 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/battery_pack_3/meshes/sleeve_plate_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='world_joint' type='fixed'>
+        <child>base_link</child>
+        <parent>world</parent>
+      </joint>
+      <link name='shoulder_link'>
+        <pose frame=''>0 0 0.1807 0 -0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>7.778</mass>
+          <inertia>
+            <ixx>0.0314743</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0314743</iyy>
+            <iyz>0</iyz>
+            <izz>0.0218756</izz>
+          </inertia>
+        </inertial>
+        <collision name='shoulder_link_collision'>
+          <pose frame=''>0 0 0 0 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/shoulder.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='shoulder_link_visual'>
+          <pose frame=''>0 0 0 0 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/shoulder.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='shoulder_pan_joint' type='revolute'>
+        <child>shoulder_link</child>
+        <parent>base_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-6.28319</lower>
+            <upper>6.28319</upper>
+            <effort>330</effort>
+            <velocity>2.0944</velocity>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='upper_arm_link'>
+        <pose frame=''>0 0 0.1807 1.5708 -0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.306 0 0.175 3.14159 1.57079 3.14159</pose>
+          <mass>12.93</mass>
+          <inertia>
+            <ixx>0.421754</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.421754</iyy>
+            <iyz>0</iyz>
+            <izz>0.0363656</izz>
+          </inertia>
+        </inertial>
+        <collision name='upper_arm_link_collision'>
+          <pose frame=''>0 0 0.1762 1.5708 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/upperarm.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='upper_arm_link_visual'>
+          <pose frame=''>0 0 0.1762 1.5708 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/upperarm.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='shoulder_lift_joint' type='revolute'>
+        <child>upper_arm_link</child>
+        <parent>shoulder_link</parent>
+        <axis>
+          <xyz>-0 1 -0</xyz>
+          <limit>
+            <lower>-6.28319</lower>
+            <upper>6.28319</upper>
+            <effort>330</effort>
+            <velocity>2.0944</velocity>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='forearm_link'>
+        <pose frame=''>0.6127 0 0.1807 1.5708 -0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.285775 0 0.0393 3.14159 1.57079 3.14159</pose>
+          <mass>3.87</mass>
+          <inertia>
+            <ixx>0.110793</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.110793</iyy>
+            <iyz>0</iyz>
+            <izz>0.0108844</izz>
+          </inertia>
+        </inertial>
+        <collision name='forearm_link_collision'>
+          <pose frame=''>0 0 0.0393 1.5708 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/forearm.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='forearm_link_visual'>
+          <pose frame=''>0 0 0.0393 1.5708 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/forearm.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='elbow_joint' type='revolute'>
+        <child>forearm_link</child>
+        <parent>upper_arm_link</parent>
+        <axis>
+          <xyz>-0 1 -0</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>3.14159</upper>
+            <effort>150</effort>
+            <velocity>3.14159</velocity>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='wrist_1_link'>
+        <pose frame=''>1.18425 0.17415 0.1807 1.5708 -0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>1.96</mass>
+          <inertia>
+            <ixx>0.00510825</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00510825</iyy>
+            <iyz>0</iyz>
+            <izz>0.0055125</izz>
+          </inertia>
+        </inertial>
+        <collision name='wrist_1_link_collision'>
+          <pose frame=''>0 0 -0.135 1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist1.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='wrist_1_link_visual'>
+          <pose frame=''>0 0 -0.135 1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist1.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='wrist_1_joint' type='revolute'>
+        <child>wrist_1_link</child>
+        <parent>forearm_link</parent>
+        <axis>
+          <xyz>-0 1 -0</xyz>
+          <limit>
+            <lower>-6.28319</lower>
+            <upper>6.28319</upper>
+            <effort>56</effort>
+            <velocity>3.14159</velocity>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='wrist_2_link'>
+        <pose frame=''>1.18425 0.17415 0.06085 -3.14159 -0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>1.96</mass>
+          <inertia>
+            <ixx>0.00510825</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00510825</iyy>
+            <iyz>0</iyz>
+            <izz>0.0055125</izz>
+          </inertia>
+        </inertial>
+        <collision name='wrist_2_link_collision'>
+          <pose frame=''>0 0 -0.12 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist2.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='wrist_2_link_visual'>
+          <pose frame=''>0 0 -0.12 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist2.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='wrist_2_joint' type='revolute'>
+        <child>wrist_2_link</child>
+        <parent>wrist_1_link</parent>
+        <axis>
+          <xyz>0 -0 -1</xyz>
+          <limit>
+            <lower>-6.28319</lower>
+            <upper>6.28319</upper>
+            <effort>56</effort>
+            <velocity>3.14159</velocity>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='wrist_3_link'>
+        <pose frame=''>1.18425 0.2907 0.06085 1.5708 -0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.008507 3e-06 0.117713 0 -0 0</pose>
+          <mass>0.857037</mass>
+          <inertia>
+            <ixx>0.00834033</ixx>
+            <ixy>-2.19162e-07</ixy>
+            <ixz>0.00086743</ixz>
+            <iyy>0.00847609</iyy>
+            <iyz>1.20953e-06</iyz>
+            <izz>0.000837041</izz>
+          </inertia>
+        </inertial>
+        <collision name='wrist_3_link_collision'>
+          <pose frame=''>0 0 -0.1168 1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist3.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='wrist_3_link_fixed_joint_lump__endeffector_base_link_collision_1'>
+          <pose frame=''>-0 0 0.002 0 -0 -1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/endeffector/meshes/endeffector_base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='wrist_3_link_fixed_joint_lump__camera_Link_collision_2'>
+          <pose frame=''>-0.055993 -0.010074 0.29615 -0.27816 0 -1.56947</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/endeffector/meshes/camera_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='wrist_3_link_fixed_joint_lump__end_tool_link_collision_3'>
+          <pose frame=''>-0 0 0.38402 0 -0 -1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/endeffector/meshes/end_tool_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='wrist_3_link_visual'>
+          <pose frame=''>0 0 -0.1168 1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist3.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='wrist_3_link_fixed_joint_lump__endeffector_base_link_visual_1'>
+          <pose frame=''>-0 0 0.002 0 -0 -1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/endeffector/meshes/endeffector_base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='wrist_3_link_fixed_joint_lump__camera_Link_visual_2'>
+          <pose frame=''>-0.055993 -0.010074 0.29615 -0.27816 0 -1.56947</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/endeffector/meshes/camera_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='wrist_3_link_fixed_joint_lump__end_tool_link_visual_3'>
+          <pose frame=''>-0 0 0.38402 0 -0 -1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/endeffector/meshes/end_tool_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+        <sensor name='cameracolor' type='camera'>
+          <camera name='camera'>
+            <horizontal_fov>1.21126</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>RGB_INT8</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.007</stddev>
+            </noise>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>30</update_rate>
+          <visualize>1</visualize>
+          <pose frame=''>-0.055993 -0.010074 0.29615 -0 -1.29264 0.001329</pose>
+        </sensor>
+        <sensor name='cameraired1' type='camera'>
+          <camera name='camera'>
+            <horizontal_fov>1.48702</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>L_INT8</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.05</stddev>
+            </noise>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>90</update_rate>
+          <visualize>0</visualize>
+          <pose frame=''>-0.055993 -0.010074 0.29615 -0 -1.29264 0.001329</pose>
+        </sensor>
+        <sensor name='cameraired2' type='camera'>
+          <camera name='camera'>
+            <horizontal_fov>1.48702</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>L_INT8</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.05</stddev>
+            </noise>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>90</update_rate>
+          <visualize>0</visualize>
+          <pose frame=''>-0.055993 -0.010074 0.29615 -0 -1.29264 0.001329</pose>
+        </sensor>
+        <sensor name='cameradepth' type='depth'>
+          <camera name='camera'>
+            <horizontal_fov>1.48702</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.01</near>
+              <far>100</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.1</stddev>
+            </noise>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>90</update_rate>
+          <visualize>0</visualize>
+          <pose frame=''>-0.055993 -0.010074 0.29615 -0 -1.29264 0.001329</pose>
+        </sensor>
+      </link>
+      <joint name='wrist_3_joint' type='revolute'>
+        <child>wrist_3_link</child>
+        <parent>wrist_2_link</parent>
+        <axis>
+          <xyz>-0 1 -0</xyz>
+          <limit>
+            <lower>-6.28319</lower>
+            <upper>6.28319</upper>
+            <effort>56</effort>
+            <velocity>3.14159</velocity>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <plugin name='camera' filename='librealsense_gazebo_plugin.so'>
+        <prefix>camera</prefix>
+        <depthUpdateRate>30.0</depthUpdateRate>
+        <colorUpdateRate>30.0</colorUpdateRate>
+        <infraredUpdateRate>30.0</infraredUpdateRate>
+        <depthTopicName>depth/image_raw</depthTopicName>
+        <depthCameraInfoTopicName>depth/camera_info</depthCameraInfoTopicName>
+        <colorTopicName>color/image_raw</colorTopicName>
+        <colorCameraInfoTopicName>color/camera_info</colorCameraInfoTopicName>
+        <infrared1TopicName>infra1/image_raw</infrared1TopicName>
+        <infrared1CameraInfoTopicName>infra1/camera_info</infrared1CameraInfoTopicName>
+        <infrared2TopicName>infra2/image_raw</infrared2TopicName>
+        <infrared2CameraInfoTopicName>infra2/camera_info</infrared2CameraInfoTopicName>
+        <colorOpticalframeName>camera_color_optical_frame</colorOpticalframeName>
+        <depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName>
+        <infrared1OpticalframeName>camera_left_ir_optical_frame</infrared1OpticalframeName>
+        <infrared2OpticalframeName>camera_right_ir_optical_frame</infrared2OpticalframeName>
+        <rangeMinDepth>0.01</rangeMinDepth>
+        <rangeMaxDepth>100.0</rangeMaxDepth>
+        <pointCloud>1</pointCloud>
+        <pointCloudTopicName>depth/color/points</pointCloudTopicName>
+        <pointCloudCutoff>0.25</pointCloudCutoff>
+        <pointCloudCutoffMax>9.0</pointCloudCutoffMax>
+        <robotNamespace>/</robotNamespace>
+      </plugin>
+      <static>0</static>
+      <plugin name='ros_control' filename='libgazebo_ros_control.so'>
+        <robotNamespace>/</robotNamespace>
+      </plugin>
+      <pose frame=''>0 0 0.3 0 -0 0</pose>
+    </model>
+    <model name='star_bolt_sleeve'>
+      <link name='star_bolt_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0 0 -0 0 -0 0</pose>
+          <mass>0.011338</mass>
+          <inertia>
+            <ixx>7.4612e-07</ixx>
+            <ixy>-3.6954e-13</ixy>
+            <ixz>-1.3504e-13</ixz>
+            <iyy>1.4267e-06</iyy>
+            <iyz>-1.8927e-13</iyz>
+            <izz>1.4267e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='star_bolt_sleeve_base_link_collision'>
+          <pose frame=''>0.005 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <cylinder>
+              <length>0.054</length>
+              <radius>0.0108</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='star_bolt_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/star_sleeve/meshes/star_sleeve_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.414244 -3.2e-05 0.357269 3.14159 1.57079 0.626203</pose>
+    </model>
+    <model name='M6_bolt_sleeve'>
+      <link name='M6_bolt_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.00116 -0 0 0 -0 0</pose>
+          <mass>0.010651</mass>
+          <inertia>
+            <ixx>8.1338e-07</ixx>
+            <ixy>2.9592e-21</ixy>
+            <ixz>-4.8249e-20</ixz>
+            <iyy>3.3923e-06</iyy>
+            <iyz>1.2184e-38</iyz>
+            <izz>3.3923e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='M6_bolt_sleeve_base_link_collision'>
+          <pose frame=''>0.009 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <cylinder>
+              <length>0.07</length>
+              <radius>0.011</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M6_bolt_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M6_sleeve/meshes/M6_sleeve_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.45 -0.035743 0.36152 3.14159 1.57079 -1.38962</pose>
+    </model>
+    <model name='cross_bolt_sleeve'>
+      <link name='cross_bolt_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0 0 0 0 -0 0</pose>
+          <mass>0.037112</mass>
+          <inertia>
+            <ixx>1.2806e-06</ixx>
+            <ixy>3.6954e-13</ixy>
+            <ixz>1.3504e-13</ixz>
+            <iyy>3.7554e-06</iyy>
+            <iyz>-1.8927e-13</iyz>
+            <izz>3.7554e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='cross_bolt_sleeve_base_link_collision'>
+          <pose frame=''>-0.0045 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <cylinder>
+              <length>0.054</length>
+              <radius>0.011</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='cross_bolt_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/cross_sleeve/meshes/cross_sleeve_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.450299 0.035788 0.339501 3.14159 1.57079 0.196057</pose>
+    </model>
+    <model name='M8_bolt_sleeve'>
+      <link name='M8_bolt_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.00074 0 -0 0 -0 0</pose>
+          <mass>0.010747</mass>
+          <inertia>
+            <ixx>8.5579e-07</ixx>
+            <ixy>-4.1281e-21</ixy>
+            <ixz>6.8952e-20</ixz>
+            <iyy>3.5699e-06</iyy>
+            <iyz>0</iyz>
+            <izz>3.5699e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='M8_bolt_sleeve_base_link_collision'>
+          <pose frame=''>0.009 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <cylinder>
+              <length>0.07</length>
+              <radius>0.011</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M8_bolt_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M8_sleeve/meshes/M8_sleeve_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.475287 -0.025291 0.361323 3.14159 1.57079 2.43066</pose>
+    </model>
+    <model name='M10_bolt_sleeve'>
+      <link name='M10_bolt_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.000367 0 -0 0 -0 0</pose>
+          <mass>0.010807</mass>
+          <inertia>
+            <ixx>9.0447e-07</ixx>
+            <ixy>-5.476e-21</ixy>
+            <ixz>9.2286e-20</ixz>
+            <iyy>3.7372e-06</iyy>
+            <iyz>2.1176e-22</iyz>
+            <izz>3.7372e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='M10_bolt_sleeve_base_link_collision'>
+          <pose frame=''>0.009 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <cylinder>
+              <length>0.07</length>
+              <radius>0.011</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M10_bolt_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M10_sleeve/meshes/M10_sleeve_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.485757 -1e-06 0.361106 3.14159 1.57079 -2.45096</pose>
+    </model>
+    <model name='M6_bolt_2'>
+      <link name='M6_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.00132117</mass>
+          <inertia>
+            <ixx>1.3904e-07</ixx>
+            <ixy>-1.11409e-12</ixy>
+            <ixz>-1.24928e-12</ixz>
+            <iyy>1.39038e-07</iyy>
+            <iyz>-5.78343e-11</iyz>
+            <izz>1.0587e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='M6_bolt_base_link_collision'>
+          <pose frame=''>0 0 -0.011 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.011 0.011 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M6_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M6_bolt/meshes/M6_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>-0.304001 0.521582 0.346912 3.14146 0.000335 1.39999</pose>
+    </model>
+    <model name='M8_bolt_1'>
+      <link name='M8_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0 -0 -0 0 -0 0</pose>
+          <mass>0.0021494</mass>
+          <inertia>
+            <ixx>2.2689e-07</ixx>
+            <ixy>-3.7275e-12</ixy>
+            <ixz>-5.9061e-13</ixz>
+            <iyy>2.2689e-07</iyy>
+            <iyz>-9.9229e-11</iyz>
+            <izz>2.5923e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='M8_bolt_base_link_collision'>
+          <pose frame=''>0 0 -0.0117 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.013 0.013 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M8_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M8_bolt/meshes/M8_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>-0.103997 0.521421 0.34691 -3.14143 -0.000113 1.41233</pose>
+    </model>
+    <model name='hexagon_bolt'>
+      <link name='hexagon_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0 0 -0 0 -0 0</pose>
+          <mass>0.0048557</mass>
+          <inertia>
+            <ixx>1.387e-07</ixx>
+            <ixy>1.944e-12</ixy>
+            <ixz>1.8554e-13</ixz>
+            <iyy>6.111e-07</iyy>
+            <iyz>-8.0444e-15</iyz>
+            <izz>6.111e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='hexagon_bolt_base_link_collision'>
+          <pose frame=''>-0.0128 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.005 0.018 0.018</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='hexagon_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/hexagon_bolt/meshes/hexagon_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.396753 0.521242 0.343655 3.14159 1.57079 1.66018</pose>
+    </model>
+    <model name='M6_bolt_1'>
+      <link name='M6_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.00132117</mass>
+          <inertia>
+            <ixx>1.3904e-07</ixx>
+            <ixy>-1.11409e-12</ixy>
+            <ixz>-1.24928e-12</ixz>
+            <iyy>1.39038e-07</iyy>
+            <iyz>-5.78343e-11</iyz>
+            <izz>1.0587e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='M6_bolt_base_link_collision'>
+          <pose frame=''>0 0 -0.011 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.011 0.011 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M6_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M6_bolt/meshes/M6_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>-0.403971 0.521573 0.346916 -3.14046 3.3e-05 2.83394</pose>
+    </model>
+    <model name='M10_bolt_2'>
+      <link name='M10_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 -0 0 -0 0</pose>
+          <mass>0.00318401</mass>
+          <inertia>
+            <ixx>3.39637e-07</ixx>
+            <ixy>-9.1621e-12</ixy>
+            <ixz>1.11626e-12</ixz>
+            <iyy>3.39635e-07</iyy>
+            <iyz>-1.52086e-10</iyz>
+            <izz>5.45645e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='M10_bolt_base_link_collision'>
+          <pose frame=''>0 0 -0.0121 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.015 0.015 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M10_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M10_bolt/meshes/M10_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.296006 0.521508 0.345949 3.14156 -9.2e-05 -0.133533</pose>
+    </model>
+    <model name='M10_bolt_1'>
+      <link name='M10_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 -0 0 -0 0</pose>
+          <mass>0.00318401</mass>
+          <inertia>
+            <ixx>3.39637e-07</ixx>
+            <ixy>-9.1621e-12</ixy>
+            <ixz>1.11626e-12</ixz>
+            <iyy>3.39635e-07</iyy>
+            <iyz>-1.52086e-10</iyz>
+            <izz>5.45645e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='M10_bolt_base_link_collision'>
+          <pose frame=''>0 0 -0.0121 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.015 0.015 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M10_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M10_bolt/meshes/M10_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.196006 0.521508 0.345949 3.14156 -9.2e-05 -0.133533</pose>
+    </model>
+    <model name='M6_bolt_obstacle'>
+      <link name='M6_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.00132117</mass>
+          <inertia>
+            <ixx>1.3904e-07</ixx>
+            <ixy>-1.11409e-12</ixy>
+            <ixz>-1.24928e-12</ixz>
+            <iyy>1.39038e-07</iyy>
+            <iyz>-5.78343e-11</iyz>
+            <izz>1.0587e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='M6_bolt_base_link_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.008 0.008 0.03</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M6_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M6_bolt/meshes/M6_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>-0.367951 0.527072 0.358495 3.14159 1.57079 2.86826</pose>
+    </model>
+    <model name='M8_bolt_2'>
+      <link name='M8_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0 -0 -0 0 -0 0</pose>
+          <mass>0.0021494</mass>
+          <inertia>
+            <ixx>2.2689e-07</ixx>
+            <ixy>-3.7275e-12</ixy>
+            <ixz>-5.9061e-13</ixz>
+            <iyy>2.2689e-07</iyy>
+            <iyz>-9.9229e-11</iyz>
+            <izz>2.5923e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='M8_bolt_base_link_collision'>
+          <pose frame=''>0 0 -0.0117 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.013 0.013 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M8_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/M8_bolt/meshes/M8_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>-0.004044 0.521484 0.346319 3.14151 -3.7e-05 0.43143</pose>
+    </model>
+    <model name='cross_bolt'>
+      <link name='cross_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.011278 -0 -0 0 -0 0</pose>
+          <mass>0.0331201</mass>
+          <inertia>
+            <ixx>6.26316e-07</ixx>
+            <ixy>-4.86314e-22</ixy>
+            <ixz>1.84045e-22</ixz>
+            <iyy>1.06496e-05</iyy>
+            <iyz>-1.32753e-22</iyz>
+            <izz>1.06496e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='cross_bolt_base_link_collision'>
+          <pose frame=''>-0.0065 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.005 0.018 0.018</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='cross_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/cross_bolt/meshes/cross_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>-0.20372 0.52146 0.350499 -3.14159 1.57079 -0.179637</pose>
+    </model>
+    <model name='star_bolt'>
+      <link name='star_bolt_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 -0 0 0 -0 0</pose>
+          <mass>0.00437956</mass>
+          <inertia>
+            <ixx>1.08966e-07</ixx>
+            <ixy>9.66322e-13</ixy>
+            <ixz>-4.50467e-13</ixz>
+            <iyy>5.82988e-07</iyy>
+            <iyz>-1.19725e-12</iyz>
+            <izz>5.82975e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='star_bolt_base_link_collision'>
+          <pose frame=''>-0.016 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.005 0.018 0.018</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='star_bolt_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/Desktop/ur10e_sim/src/model/star_bolt/meshes/star_bolt_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0.095408 0.52145 0.341331 3.14159 1.57079 -1.32919</pose>
+    </model>
+    <light name='user_point_light_0' type='point'>
+      <pose frame=''>0.006256 0.026367 1 0 -0 0</pose>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+      <direction>0 0 -1</direction>
+    </light>
+    <state world_name='default'>
+      <sim_time>244 532000000</sim_time>
+      <real_time>443 283144232</real_time>
+      <wall_time>1668062385 78168180</wall_time>
+      <iterations>244532</iterations>
+      <model name='M10_bolt_1'>
+        <pose frame=''>0.195997 0.521413 0.3459 -3.14156 -6e-05 -0.152233</pose>
+        <scale>1 1 1</scale>
+        <link name='M10_bolt_base_link'>
+          <pose frame=''>0.195997 0.521413 0.3459 -3.14156 -6e-05 -0.152233</pose>
+          <velocity>0.001097 -0.00021 2.6e-05 -0.021831 -0.114301 6e-06</velocity>
+          <acceleration>2.11336 -0.483077 0.100839 -0.33532 -0.201866 0.545575</acceleration>
+          <wrench>0.006729 -0.001538 0.000321 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M10_bolt_2'>
+        <pose frame=''>0.296043 0.521482 0.3459 -3.14156 -5.5e-05 -0.140299</pose>
+        <scale>1 1 1</scale>
+        <link name='M10_bolt_base_link'>
+          <pose frame=''>0.296043 0.521482 0.3459 -3.14156 -5.5e-05 -0.140299</pose>
+          <velocity>0.000955 -0.000247 3.6e-05 -0.025685 -0.099505 6e-06</velocity>
+          <acceleration>1.91099 -0.487948 0.071686 2.0615 1.11995 -2.19484</acceleration>
+          <wrench>0.006085 -0.001554 0.000228 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M10_bolt_sleeve'>
+        <pose frame=''>0.485229 0.000106 0.361 -2.3009 1.57077 -1.2535</pose>
+        <scale>1 1 1</scale>
+        <link name='M10_bolt_sleeve_base_link'>
+          <pose frame=''>0.485229 0.000106 0.361 -2.3009 1.57077 -1.2535</pose>
+          <velocity>0.002908 0.004303 0.008315 -0.097898 0.066486 0.003055</velocity>
+          <acceleration>3.35489 2.82356 18.0599 3.09013 -1.2039 -0.222898</acceleration>
+          <wrench>0.036256 0.030514 0.195174 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M6_bolt_1'>
+        <pose frame=''>-0.403996 0.521618 0.347003 3.14105 -6.4e-05 2.82342</pose>
+        <scale>1 1 1</scale>
+        <link name='M6_bolt_base_link'>
+          <pose frame=''>-0.403996 0.521618 0.347003 3.14105 -6.4e-05 2.82342</pose>
+          <velocity>-0.000547 0.001681 0.004158 0.198009 0.064568 -0.000409</velocity>
+          <acceleration>-1.87345 -1.56638 -1.9477 -1.52617 -0.706324 0.218375</acceleration>
+          <wrench>-0.002475 -0.002069 -0.002573 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M6_bolt_2'>
+        <pose frame=''>-0.304476 0.521937 0.347003 -3.14124 -0.000306 1.30728</pose>
+        <scale>1 1 1</scale>
+        <link name='M6_bolt_base_link'>
+          <pose frame=''>-0.304476 0.521937 0.347003 -3.14124 -0.000306 1.30728</pose>
+          <velocity>0.000875 0.000905 0.001878 0.106398 -0.103035 1.2e-05</velocity>
+          <acceleration>2.0007 -2.70992 0.204674 -1.36767 -0.290577 0.186893</acceleration>
+          <wrench>0.002643 -0.00358 0.00027 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M6_bolt_obstacle'>
+        <pose frame=''>-1.33989 0.784084 0.003995 -1.57095 1.57074 -1.82759</pose>
+        <scale>1 1 1</scale>
+        <link name='M6_bolt_base_link'>
+          <pose frame=''>-1.33989 0.784084 0.003995 -1.57095 1.57074 -1.82759</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 -9.8 0 -0 2e-06</acceleration>
+          <wrench>0 0 -0.012947 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M6_bolt_sleeve'>
+        <pose frame=''>0.449552 -0.035438 0.361001 -0.140534 1.57072 1.66182</pose>
+        <scale>1 1 1</scale>
+        <link name='M6_bolt_sleeve_base_link'>
+          <pose frame=''>0.449552 -0.035438 0.361001 -0.140534 1.57072 1.66182</pose>
+          <velocity>0.001059 -0.002958 0.00061 0.067214 0.024186 0.000385</velocity>
+          <acceleration>0.124213 0.373793 -7.95305 1.15011 0.336923 2.98543</acceleration>
+          <wrench>0.001323 0.003981 -0.084708 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M8_bolt_1'>
+        <pose frame=''>-0.104238 0.521465 0.3463 -3.14156 -2.4e-05 1.39579</pose>
+        <scale>1 1 1</scale>
+        <link name='M8_bolt_base_link'>
+          <pose frame=''>-0.104238 0.521465 0.3463 -3.14156 -2.4e-05 1.39579</pose>
+          <velocity>-0.000987 0.0001 0.00023 0.010829 0.107286 -8e-06</velocity>
+          <acceleration>-1.98936 0.227208 0.454567 2.62623 0.534678 2.16624</acceleration>
+          <wrench>-0.004276 0.000488 0.000977 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M8_bolt_2'>
+        <pose frame=''>-0.005348 0.52217 0.346299 -3.14152 -7.5e-05 0.294519</pose>
+        <scale>1 1 1</scale>
+        <link name='M8_bolt_base_link'>
+          <pose frame=''>-0.005348 0.52217 0.346299 -3.14152 -7.5e-05 0.294519</pose>
+          <velocity>-1.5e-05 0.00315 -0.002259 0.342191 0.000201 -0.001957</velocity>
+          <acceleration>0.62302 2.47981 -2.05416 -2.7021 1.00591 -0.372016</acceleration>
+          <wrench>0.001339 0.00533 -0.004415 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='M8_bolt_sleeve'>
+        <pose frame=''>0.47483 -0.024987 0.361 0.328052 1.57079 -0.334734</pose>
+        <scale>1 1 1</scale>
+        <link name='M8_bolt_sleeve_base_link'>
+          <pose frame=''>0.47483 -0.024987 0.361 0.328052 1.57079 -0.334734</pose>
+          <velocity>0.001175 -0.002909 0.008505 0.066124 0.026725 0.000115</velocity>
+          <acceleration>-0.191554 -1.40767 18.3986 -1.41083 0.962895 0.377343</acceleration>
+          <wrench>-0.002059 -0.015128 0.19773 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='cross_bolt'>
+        <pose frame=''>-0.201687 0.519939 0.350499 0.514141 1.57065 -2.89907</pose>
+        <scale>1 1 1</scale>
+        <link name='cross_bolt_base_link'>
+          <pose frame=''>-0.201687 0.519939 0.350499 0.514141 1.57065 -2.89907</pose>
+          <velocity>-0.000595 -7.8e-05 -0.001303 -0.036146 0.146131 0.00731</velocity>
+          <acceleration>-1.98495 -0.320565 -1.32401 1.66826 -0.435147 1.85394</acceleration>
+          <wrench>-0.065742 -0.010617 -0.043851 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='cross_bolt_sleeve'>
+        <pose frame=''>0.44955 0.036093 0.339499 -3.01897 1.57062 -0.271368</pose>
+        <scale>1 1 1</scale>
+        <link name='cross_bolt_sleeve_base_link'>
+          <pose frame=''>0.44955 0.036093 0.339499 -3.01897 1.57062 -0.271368</pose>
+          <velocity>-0.004481 -0.001174 0.007849 0.052274 -0.199273 -0.000171</velocity>
+          <acceleration>-4.15062 -1.60922 17.3686 2.30259 0.541149 -1.99727</acceleration>
+          <wrench>-0.154038 -0.059722 0.644582 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='ground_plane'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='hexagon_bolt'>
+        <pose frame=''>0.396721 0.521243 0.3442 -1.66379 1.57079 3.14159</pose>
+        <scale>1 1 1</scale>
+        <link name='hexagon_bolt_base_link'>
+          <pose frame=''>0.396721 0.521243 0.3442 -1.66379 1.57079 3.14159</pose>
+          <velocity>-0.000243 0.001303 0.000516 0.126516 0.023543 3e-06</velocity>
+          <acceleration>-0.484985 2.60635 1.03215 -2.25999 0.038099 -3.11724</acceleration>
+          <wrench>-0.002355 0.012656 0.005012 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='hexagon_bolt_sleeve'>
+        <pose frame=''>0.424263 0.025609 0.3483 0.039683 1.57075 -2.75889</pose>
+        <scale>1 1 1</scale>
+        <link name='hexagon_bolt_sleeve_base_link'>
+          <pose frame=''>0.424263 0.025609 0.3483 0.039683 1.57075 -2.75889</pose>
+          <velocity>0.001911 0.00014 -0.000391 -0.013846 0.058705 -0.036102</velocity>
+          <acceleration>2.04849 0.304848 -0.744771 2.72544 -0.255956 -0.348693</acceleration>
+          <wrench>0.024039 0.003577 -0.00874 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='robot'>
+        <pose frame=''>-0 0 0.3 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='base_link'>
+          <pose frame=''>-0 0 0.3 0 -0 0</pose>
+          <velocity>0 -0 -0 0 -0 0</velocity>
+          <acceleration>4e-06 -1e-06 -1e-06 6e-06 1.9e-05 6e-06</acceleration>
+          <wrench>0.00254 -0.000516 -0.000976 0 -0 0</wrench>
+        </link>
+        <link name='forearm_link'>
+          <pose frame=''>0.6127 -5.1e-05 0.480596 1.57084 -0.000137 3.14151</pose>
+          <velocity>1e-06 -2e-06 0.004573 2e-06 -0.007116 -3e-06</velocity>
+          <acceleration>3.3e-05 -0.000102 -0.000631 0.003117 0.00083 -0.000312</acceleration>
+          <wrench>0.000127 -0.000393 -0.002441 0 -0 0</wrench>
+        </link>
+        <link name='shoulder_link'>
+          <pose frame=''>-0 -0 0.480699 2.6e-05 -0.000142 3.14151</pose>
+          <velocity>-0 0 -0 2e-06 -0 -3e-06</velocity>
+          <acceleration>-5e-06 3e-06 -9e-06 0.004833 0.000784 -2.4e-05</acceleration>
+          <wrench>-3.8e-05 2.6e-05 -7e-05 0 -0 0</wrench>
+        </link>
+        <link name='upper_arm_link'>
+          <pose frame=''>-0 0 0.480694 1.57081 -0.000152 3.14151</pose>
+          <velocity>0 -0 -0 2e-06 -0.007464 -3e-06</velocity>
+          <acceleration>2.5e-05 -7e-06 0.000554 0.003535 0.000813 -1.9e-05</acceleration>
+          <wrench>0.000324 -8.8e-05 0.007167 0 -0 0</wrench>
+        </link>
+        <link name='wrist_1_link'>
+          <pose frame=''>1.18426 0.174051 0.480515 1.57085 -0.000129 3.14151</pose>
+          <velocity>2e-06 -3e-06 0.008641 1e-06 -0.006488 -3e-06</velocity>
+          <acceleration>7e-06 -0.000198 -0.000201 0.002374 0.000813 -0.000429</acceleration>
+          <wrench>1.3e-05 -0.000387 -0.000394 0 -0 0</wrench>
+        </link>
+        <link name='wrist_2_link'>
+          <pose frame=''>1.18425 0.174048 0.360665 -3.14153 -0.000129 3.14152</pose>
+          <velocity>0.000779 -3e-06 0.008641 1e-06 -0.006488 0.000161</velocity>
+          <acceleration>-6.7e-05 0.00023 -0.000178 0.001876 0.000813 -0.000391</acceleration>
+          <wrench>-0.000132 0.000451 -0.000349 0 -0 0</wrench>
+        </link>
+        <link name='wrist_3_link'>
+          <pose frame=''>1.18426 0.290598 0.360659 1.57086 -0.000126 3.14152</pose>
+          <velocity>0.000761 -3e-06 0.008641 1e-06 -0.006827 0.000161</velocity>
+          <acceleration>2.1e-05 0.000234 0.000561 0.003087 0.0106 0.000157</acceleration>
+          <wrench>1.8e-05 0.0002 0.000481 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='star_bolt'>
+        <pose frame=''>0.09526 0.521354 0.340998 2.80899 1.57052 -1.66727</pose>
+        <scale>1 1 1</scale>
+        <link name='star_bolt_base_link'>
+          <pose frame=''>0.09526 0.521354 0.340998 2.80899 1.57052 -1.66727</pose>
+          <velocity>-0.000422 -0.004112 -0.002484 -0.304907 0.029175 0.00274</velocity>
+          <acceleration>0.6736 -2.49534 -2.82724 -3.05797 1.53236 0.356263</acceleration>
+          <wrench>0.00295 -0.010928 -0.012382 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='star_bolt_sleeve'>
+        <pose frame=''>0.413818 0.000631 0.349 1.22964 1.57078 -0.792783</pose>
+        <scale>1 1 1</scale>
+        <link name='star_bolt_sleeve_base_link'>
+          <pose frame=''>0.413818 0.000631 0.349 1.22964 1.57078 -0.792783</pose>
+          <velocity>-0.001372 -0.000808 0.000183 0.025288 -0.04292 -0.000156</velocity>
+          <acceleration>-2.47648 0.302926 -0.091771 -0.615199 -1.05136 0.631027</acceleration>
+          <wrench>-0.028078 0.003435 -0.001041 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose frame=''>0 0 10 0 -0 0</pose>
+      </light>
+      <light name='user_point_light_0'>
+        <pose frame=''>0 0 2 0 -0 0</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>-0.838909 -1.17448 1.53721 0 0.763643 1.46419</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+  </world>
+</sdf>

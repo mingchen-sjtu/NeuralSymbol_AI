@@ -1,0 +1,257 @@
+# The location of the bag file to replay. This can accept environment args (ex. $(optenv HOME))
+# This should be changed, since it points to your data.
+# bag_file: "$(find nn_data_collection)/test/data_collect.bag"
+# The rate at which to step through the bag file, in seconds.
+simulated_rate: 0.5
+# The frame_id of the camera as represented in the TF tree. This should follow usual camera
+# frame conventions of +Z extending forward perpendicular to the lens
+camera_frame_id: "camera_color_optical_frame"
+# The global static frame used to reference all models in Gazebo. Almost always 'map'.
+global_frame: "world"
+
+# These parameters allow for tuning of the background subtractor.
+background_subtractor:
+    # How many images should be collected to train the subtractor. Helps with noise.
+    history_length: 1
+    # The threshold on the squared Mahalanobis distance between the pixel and the model.
+    var_threshold: 500
+    # If tru, detect shadows and mark them with a lighter color.
+    detect_shadows: false
+
+# Specify values needed by any data writing format.
+yolo:
+    output_folder: "$(optenv HOME)/Desktop/results/YOLO_Output/data"
+    main_list: "$(optenv HOME)/Desktop/results/YOLO_Output/output.txt"
+# stvnet:
+#     output_folder: "$(optenv HOME)/Desktop/results/STVNet_Output"
+# bounding_shape:
+#     output_folder: "$(optenv HOME)/Desktop/results/BoundingShape"
+#     output_frame: "wrist_3_link"
+
+# The list of robots to control.
+/robot_list: ["M6_bolt_1","M6_bolt_2","M8_bolt_1","M8_bolt_2","M10_bolt_1","M10_bolt_2","hexagon_bolt","cross_bolt","star_bolt",]
+
+# Specify the needed values for each robot.
+M6_bolt_1:
+    # A unique identifier for the entire class. Can be a string or numeric.
+    class: "0"
+    # A globally unique identifier for the specific robot. Can be string or numeric.
+    id: "M6_bolt_1"
+    frame_id: "base_link"
+    # These are the key points to look for in detection, relative to the origin of the
+    # frame specified in "frame_id". They can be anywhere.
+    keypoints: [
+        [-0.0085, 0.0055, -0.0055],
+        [-0.0085, 0.0055, 0.0055],
+        [-0.0085, -0.0055, -0.0055],
+        [-0.0085, -0.0055, 0.0055],
+        [-0.0135, 0.0055, -0.0055],
+        [-0.0135, 0.0055, 0.0055],
+        [-0.0135, -0.0055, -0.0055],
+        [-0.0135, -0.0055, 0.0055]
+        ]
+    # These are the points that circumscribe the robot in 3D space, relative to the origin of
+    # the frame specified in "frame_id". They do not need to be convex and can be an arbitrary
+    # shape, as long as they circumscribe the robot.
+    bounding_shape: [
+        [-0.0085, 0.0055, -0.0055],
+        [-0.0085, 0.0055, 0.0055],
+        [-0.0085, -0.0055, -0.0055],
+        [-0.0085, -0.0055, 0.0055],
+        [-0.0135, 0.0055, -0.0055],
+        [-0.0135, 0.0055, 0.0055],
+        [-0.0135, -0.0055, -0.0055],
+        [-0.0135, -0.0055, 0.0055]
+        ]
+M6_bolt_2:
+    class: "0"
+    id: "M6_bolt_2"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.0085, 0.0055, -0.0055],
+        [-0.0085, 0.0055, 0.0055],
+        [-0.0085, -0.0055, -0.0055],
+        [-0.0085, -0.0055, 0.0055],
+        [-0.0135, 0.0055, -0.0055],
+        [-0.0135, 0.0055, 0.0055],
+        [-0.0135, -0.0055, -0.0055],
+        [-0.0135, -0.0055, 0.0055]
+        ]
+    bounding_shape: [
+        [-0.0085, 0.0055, -0.0055],
+        [-0.0085, 0.0055, 0.0055],
+        [-0.0085, -0.0055, -0.0055],
+        [-0.0085, -0.0055, 0.0055],
+        [-0.0135, 0.0055, -0.0055],
+        [-0.0135, 0.0055, 0.0055],
+        [-0.0135, -0.0055, -0.0055],
+        [-0.0135, -0.0055, 0.0055]
+        ]
+M8_bolt_1:
+    class: "1"
+    id: "M8_bolt_1"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.0092, 0.0065, -0.0065],
+        [-0.0092, 0.0065, 0.0065],
+        [-0.0092, -0.0065, -0.0065],
+        [-0.0092, -0.0065, 0.0065],
+        [-0.0142, 0.0065, -0.0065],
+        [-0.0142, 0.0065, 0.0065],
+        [-0.0142, -0.0065, -0.0065],
+        [-0.0142, -0.0065, 0.0065]
+        ]
+    bounding_shape: [
+        [-0.0092, 0.0065, -0.0065],
+        [-0.0092, 0.0065, 0.0065],
+        [-0.0092, -0.0065, -0.0065],
+        [-0.0092, -0.0065, 0.0065],
+        [-0.0142, 0.0065, -0.0065],
+        [-0.0142, 0.0065, 0.0065],
+        [-0.0142, -0.0065, -0.0065],
+        [-0.0142, -0.0065, 0.0065]
+        ]
+M8_bolt_2:
+    class: "1"
+    id: "M8_bolt_2"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.0092, 0.0065, -0.0065],
+        [-0.0092, 0.0065, 0.0065],
+        [-0.0092, -0.0065, -0.0065],
+        [-0.0092, -0.0065, 0.0065],
+        [-0.0142, 0.0065, -0.0065],
+        [-0.0142, 0.0065, 0.0065],
+        [-0.0142, -0.0065, -0.0065],
+        [-0.0142, -0.0065, 0.0065]
+        ]
+    bounding_shape: [
+        [-0.0092, 0.0065, -0.0065],
+        [-0.0092, 0.0065, 0.0065],
+        [-0.0092, -0.0065, -0.0065],
+        [-0.0092, -0.0065, 0.0065],
+        [-0.0142, 0.0065, -0.0065],
+        [-0.0142, 0.0065, 0.0065],
+        [-0.0142, -0.0065, -0.0065],
+        [-0.0142, -0.0065, 0.0065]
+        ]
+M10_bolt_1:
+    class: "2"
+    id: "M10_bolt_1"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.0096, 0.0075, -0.0075],
+        [-0.0096, 0.0075, 0.0075],
+        [-0.0096, -0.0075, -0.0075],
+        [-0.0096, -0.0075, 0.0075],
+        [-0.0146, 0.0075, -0.0075],
+        [-0.0146, 0.0075, 0.0075],
+        [-0.0146, -0.0075, -0.0075],
+        [-0.0146, -0.0075, 0.0075]
+        ]
+    bounding_shape: [
+        [-0.0096, 0.0075, -0.0075],
+        [-0.0096, 0.0075, 0.0075],
+        [-0.0096, -0.0075, -0.0075],
+        [-0.0096, -0.0075, 0.0075],
+        [-0.0146, 0.0075, -0.0075],
+        [-0.0146, 0.0075, 0.0075],
+        [-0.0146, -0.0075, -0.0075],
+        [-0.0146, -0.0075, 0.0075]
+        ]
+M10_bolt_2:
+    class: "2"
+    id: "M10_bolt_2"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.0096, 0.0075, -0.0075],
+        [-0.0096, 0.0075, 0.0075],
+        [-0.0096, -0.0075, -0.0075],
+        [-0.0096, -0.0075, 0.0075],
+        [-0.0146, 0.0075, -0.0075],
+        [-0.0146, 0.0075, 0.0075],
+        [-0.0146, -0.0075, -0.0075],
+        [-0.0146, -0.0075, 0.0075]
+        ]
+    bounding_shape: [
+        [-0.0096, 0.0075, -0.0075],
+        [-0.0096, 0.0075, 0.0075],
+        [-0.0096, -0.0075, -0.0075],
+        [-0.0096, -0.0075, 0.0075],
+        [-0.0146, 0.0075, -0.0075],
+        [-0.0146, 0.0075, 0.0075],
+        [-0.0146, -0.0075, -0.0075],
+        [-0.0146, -0.0075, 0.0075]
+        ]
+hexagon_bolt:
+    class: "3"
+    id: "hexagon_bolt"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.0103, 0.009, -0.009],
+        [-0.0103, 0.009, 0.009],
+        [-0.0103, -0.009, -0.009],
+        [-0.0103, -0.009, 0.009],
+        [-0.0153, 0.009, -0.009],
+        [-0.0153, 0.009, 0.009],
+        [-0.0153, -0.009, -0.009],
+        [-0.0153, -0.009, 0.009]
+        ]
+    bounding_shape: [
+        [-0.0103, 0.009, -0.009],
+        [-0.0103, 0.009, 0.009],
+        [-0.0103, -0.009, -0.009],
+        [-0.0103, -0.009, 0.009],
+        [-0.0153, 0.009, -0.009],
+        [-0.0153, 0.009, 0.009],
+        [-0.0153, -0.009, -0.009],
+        [-0.0153, -0.009, 0.009]
+        ]
+cross_bolt:
+    class: "4"
+    id: "cross_bolt"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.004, 0.009, -0.009],
+        [-0.004, 0.009, 0.009],
+        [-0.004, -0.009, -0.009],
+        [-0.004, -0.009, 0.009],
+        [-0.009, 0.009, -0.009],
+        [-0.009, 0.009, 0.009],
+        [-0.009, -0.009, -0.009],
+        [-0.009, -0.009, 0.009]
+        ]
+    bounding_shape: [
+        [-0.004, 0.009, -0.009],
+        [-0.004, 0.009, 0.009],
+        [-0.004, -0.009, -0.009],
+        [-0.004, -0.009, 0.009],
+        [-0.009, 0.009, -0.009],
+        [-0.009, 0.009, 0.009],
+        [-0.009, -0.009, -0.009],
+        [-0.009, -0.009, 0.009]
+        ]
+star_bolt:
+    class: "5"
+    id: "star_bolt"
+    frame_id: "base_link"
+    keypoints: [
+        [-0.0135, 0.009, -0.009],
+        [-0.0135, 0.009, 0.009],
+        [-0.0135, -0.009, -0.009],
+        [-0.0135, -0.009, 0.009],
+        [-0.0185, 0.009, -0.009],
+        [-0.0185, 0.009, 0.009],
+        [-0.0185, -0.009, -0.009],
+        [-0.0185, -0.009, 0.009]
+        ]
+    bounding_shape: [
+        [-0.0135, 0.009, -0.009],
+        [-0.0135, 0.009, 0.009],
+        [-0.0135, -0.009, -0.009],
+        [-0.0135, -0.009, 0.009],
+        [-0.0185, 0.009, -0.009],
+        [-0.0185, 0.009, 0.009],
+        [-0.0185, -0.009, -0.009],
+        [-0.0185, -0.009, 0.009]
+        ]

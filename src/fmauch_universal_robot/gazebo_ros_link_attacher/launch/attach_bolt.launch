@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="gazebo_ros_link_attacher" type="attach_bolt.py" name="attach_bolt" output="screen">
+    </node>
+</launch>

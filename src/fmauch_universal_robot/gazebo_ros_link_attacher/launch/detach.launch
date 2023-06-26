@@ -1,0 +1,7 @@
+<launch>
+		<param name="sleeve_type" value="M8_bolt" />
+        <!-- <arg name="sleeve_type" default="M8_sleeve" /> -->
+		<node pkg="gazebo_ros_link_attacher" name="remove" type="detach.py" output="screen">
+            <!-- <param name="sleeve_type" value="$(arg sleeve_type)" /> -->
+		</node>
+</launch>

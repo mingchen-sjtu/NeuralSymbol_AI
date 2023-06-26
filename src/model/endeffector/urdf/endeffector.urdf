@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="endeffector">
+  <link
+    name="endeffector_base_link">
+    <inertial>
+      <origin
+        xyz="-0.0011154 -0.0040842 0.13374"
+        rpy="0 0 0" />
+      <mass
+        value="0.54581" />
+      <inertia
+        ixx="0.00043211"
+        ixy="4.2921E-06"
+        ixz="-4.3462E-07"
+        iyy="0.00044772"
+        iyz="-1.6703E-06"
+        izz="0.00028566" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/endeffector_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/endeffector_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="camera_link">
+    <inertial>
+      <origin
+        xyz="-0.0099758 -5.5878E-05 -0.012823"
+        rpy="0 0 0" />
+      <mass
+        value="0.083591" />
+      <inertia
+        ixx="9.6552E-06"
+        ixy="3.3067E-08"
+        ixz="2.1363E-08"
+        iyy="0.00010055"
+        iyz="-5.829E-08"
+        izz="0.00010128" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/camera_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/camera_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera_joint"
+    type="fixed">
+    <origin
+      xyz="-0.004761 -0.056692 0.29415"
+      rpy="-0.27816 0 -0.26047" />
+    <parent
+      link="endeffector_base_link" />
+    <child
+      link="camera_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="end_tool_link">
+    <inertial>
+      <origin
+        xyz="8.7797E-08 -1.5275E-07 -0.067279"
+        rpy="0 0 0" />
+      <mass
+        value="0.025636" />
+      <inertia
+        ixx="3.2758E-05"
+        ixy="1.2024E-11"
+        ixz="-1.1774E-10"
+        iyy="3.2758E-05"
+        iyz="2.0475E-10"
+        izz="1.1107E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/end_tool_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/end_tool_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="end_tool_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.38202"
+      rpy="0 0 0" />
+    <parent
+      link="endeffector_base_link" />
+    <child
+      link="end_tool_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

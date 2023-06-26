@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+	<node pkg="gazebo_ros_link_attacher" type="data_collect_yolo.py" name="collect_data" output="screen">
+		<rosparam file="$(find gazebo_ros_link_attacher)/config/params.yaml" command="load" subst_value="true"/>
+		<!-- <remap from="/camera/camera/color/image_raw" to="camera/image_raw"/>
+		<remap from="/camera/camera/color/camera_info" to="camera/camera_info"/> -->
+	</node>
+</launch>
