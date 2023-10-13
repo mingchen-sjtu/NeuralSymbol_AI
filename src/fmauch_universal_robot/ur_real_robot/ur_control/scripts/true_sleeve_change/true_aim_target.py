@@ -72,8 +72,20 @@ class TrueAimTarget(TrueBase):
                                                         tgt_pose_in_effector_frame,
                                                         rospy.Time.now()) 
         return tgt_pose_in_world_frame
+    
+    def set_global_position(self):
+        global_position = geometry_msgs.msg.Pose()
+        global_position.position.x = -0.059
+        global_position.position.y = 0.379
+        global_position.position.z = 0.57
+        q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+        global_position.orientation.x = q[0]
+        global_position.orientation.y = q[1]
+        global_position.orientation.z = q[2]
+        global_position.orientation.w = q[3] 
+        return global_position
 
-    def action(self, all_info, pre_result_dict,kalman,yolo):
+    def action(self, all_info, pre_result_dict,kalman,yolo,bolt_is_dis):
         for param in self.action_params:
             if not param in all_info.keys():
                 print(param, 'must give')
@@ -98,9 +110,10 @@ class TrueAimTarget(TrueBase):
             s=kalman.itr_sum
             if detect_ret:
                 circlesbox=[]
-                for bolt in detect_ret[1].keys():
-                    print('bolt center success')
-                    circlesbox.extend(detect_ret[1][bolt])
+                # for bolt in detect_ret[1].keys():
+                if 'bolt' in detect_ret[1].keys():
+                        print('bolt center success')
+                        circlesbox.extend(detect_ret[1]['bolt'])
                 # if 'screw' in detect_ret[1].keys():
                 #     print('screw success')
                 #     circlesbox.extend(detect_ret[1]["screw"])
@@ -116,6 +129,7 @@ class TrueAimTarget(TrueBase):
                 if (s==0):
                     # circle = self.findBestMatchCircle(circles) 
                     min_dist=100
+                    is_dis_bolt=False
                     curr_pose= self.group.get_current_pose(self.effector).pose
                     for screw in circlesbox:
                         # self.add_bolt_frame(screw[0]-(r_width-width)/2,screw[1]-(r_height-height)/2, latest_infos)
@@ -125,11 +139,20 @@ class TrueAimTarget(TrueBase):
                         screw[3] = screw[3]-(r_height-height)/2                        
                         self.add_bolt_frameV2(screw, latest_infos)
                         bolt_pose=self.get_bolt_pose_in_world_frame(latest_infos)
-                        temp_dist=math.sqrt(pow(bolt_pose.position.x - curr_pose.position.x ,2)+pow(bolt_pose.position.y - curr_pose.position.y ,2))            
-                        if (temp_dist<min_dist):
-                            min_dist=temp_dist
-                            conv_pose=bolt_pose
+                        for is_dis in bolt_is_dis:
+                                dis_diff=math.sqrt(pow(bolt_pose.position.x - is_dis.position.x ,2)+pow(bolt_pose.position.y - is_dis.position.y ,2))
+                                print("dis_diff",dis_diff)
+                                if dis_diff < 0.01:
+                                    is_dis_bolt=True
+                                print("is_dis_bolt",is_dis_bolt)
+                        if is_dis_bolt==False:
+                            temp_dist=math.sqrt(pow(bolt_pose.position.x - curr_pose.position.x - 0.03 ,2)+pow(bolt_pose.position.y - curr_pose.position.y ,2))            
+                            if (temp_dist<min_dist):
+                                min_dist=temp_dist
+                                conv_pose=bolt_pose
+                        is_dis_bolt=False
                     real_pose=kalman.iteration(conv_pose)
+
                     self.adjust_bolt_frame(real_pose,latest_infos)
                     ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
 
@@ -138,6 +161,10 @@ class TrueAimTarget(TrueBase):
                         print(curr_pose)
                 else:
                     min_diff=100
+                    coarse_pose_list=[]
+                    temp_diff_list=[]
+                    is_dis_bolt=False
+                    print("bolt_is_dis",bolt_is_dis)
                     for screw in circlesbox:
                         # self.add_bolt_frame(screw[0]-(r_width-width)/2,screw[1]-(r_height-height)/2, latest_infos)
                         screw[0] = screw[0]-(r_width-width)/2
@@ -152,47 +179,94 @@ class TrueAimTarget(TrueBase):
                         if (temp_diff<min_diff):
                             min_diff=temp_diff
                             near_pose=bolt_pose
-                        if (temp_diff > 0.02) and (temp_diff < 0.15) and (np_collected==False):
-                            coarse_pose = geometry_msgs.msg.Pose()
-                            # if  bolt_pose.position.x >0 and  bolt_pose.position.x <0.02 :
-                            #     coarse_pose.position.x=0.08
+                        if (temp_diff > 0.02):
+                            for is_dis in bolt_is_dis:
+                                dis_diff=math.sqrt(pow(bolt_pose.position.x - is_dis.position.x ,2)+pow(bolt_pose.position.y - is_dis.position.y ,2))
+                                print("dis_diff",dis_diff)
+                                
+                                if dis_diff < 0.01:
+                                    is_dis_bolt=True
+                                print("is_dis_bolt",is_dis_bolt)
+                            if is_dis_bolt==False:
+                                coarse_pose_list.append(bolt_pose)
+                                temp_diff_list.append(temp_diff)
+                        is_dis_bolt=False
+                    if  np_collected==False and (not temp_diff_list==[]):
+                        # print("coarse_pose_list:",coarse_pose_list)
+                        # print("temp_diff_list:",temp_diff_list)
+
+                        # print(temp_diff_list)
+                        # print(coarse_pose_list)
+                        # print(temp_diff_list.index(min(temp_diff_list)))
+                        # print(coarse_pose_list[temp_diff_list.index(min(temp_diff_list))])
+
+
+                        coarse_pose = geometry_msgs.msg.Pose()
+                        # if  bolt_pose.position.x >0 and  bolt_pose.position.x <0.02 :
+                        #     coarse_pose.position.x=0.08
                                
-                            # coarse_pose.position.x = bolt_pose.position.x-0.02
-                            # coarse_pose.position.y = bolt_pose.position.y-0.02
-                            coarse_pose.position.x = bolt_pose.position.x-0.065
-                            coarse_pose.position.y = bolt_pose.position.y
-                            coarse_pose.position.z = 0.65
+                        # coarse_pose.position.x = bolt_pose.position.x-0.02
+                        # coarse_pose.position.y = bolt_pose.position.y-0.02
+                        coarse_pose.position.x = coarse_pose_list[temp_diff_list.index(min(temp_diff_list))].position.x
+                        coarse_pose.position.y = coarse_pose_list[temp_diff_list.index(min(temp_diff_list))].position.y
+                        coarse_pose.position.z = 0.57
 
-                            # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
-                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
-                            coarse_pose.orientation.x = q[0]
-                            coarse_pose.orientation.y = q[1]
-                            coarse_pose.orientation.z = q[2]
-                            coarse_pose.orientation.w = q[3]
+                        # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+                        q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+                        coarse_pose.orientation.x = q[0]
+                        coarse_pose.orientation.y = q[1]
+                        coarse_pose.orientation.z = q[2]
+                        coarse_pose.orientation.w = q[3]
 
-                            planner.next_pose=coarse_pose
-                            np_collected=True
-                        elif (temp_diff > 0.03) and (np_collected==False):
-                            coarse_pose = geometry_msgs.msg.Pose()
-                            # if  bolt_pose.position.x >0 and  bolt_pose.position.x <0.02 :
-                            #     coarse_pose.position.x=0.08
+                        planner.next_pose=coarse_pose
+                        print("next_pose",coarse_pose)
+                        # rospy.sleep(30)
+                        np_collected=True
+
+                        # if (temp_diff > 0.02) and (temp_diff < 0.15) and (np_collected==False):
+                        #     coarse_pose = geometry_msgs.msg.Pose()
+                        #     # if  bolt_pose.position.x >0 and  bolt_pose.position.x <0.02 :
+                        #     #     coarse_pose.position.x=0.08
                                
-                            # coarse_pose.position.x = bolt_pose.position.x-0.02
-                            # coarse_pose.position.y = bolt_pose.position.y-0.02
-                            coarse_pose.position.x = bolt_pose.position.x-0.065
-                            coarse_pose.position.y = bolt_pose.position.y         
-                            coarse_pose.position.z = 0.65
+                        #     # coarse_pose.position.x = bolt_pose.position.x-0.02
+                        #     # coarse_pose.position.y = bolt_pose.position.y-0.02
+                        #     coarse_pose.position.x = bolt_pose.position.x-0.065
+                        #     coarse_pose.position.y = bolt_pose.position.y
+                        #     coarse_pose.position.z = 0.65
 
-                            # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
-                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
-                            coarse_pose.orientation.x = q[0]
-                            coarse_pose.orientation.y = q[1]
-                            coarse_pose.orientation.z = q[2]
-                            coarse_pose.orientation.w = q[3]
+                        #     # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+                        #     q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+                        #     coarse_pose.orientation.x = q[0]
+                        #     coarse_pose.orientation.y = q[1]
+                        #     coarse_pose.orientation.z = q[2]
+                        #     coarse_pose.orientation.w = q[3]
 
-                            planner.next_pose=coarse_pose
-                            np_collected=True
+                        #     planner.next_pose=coarse_pose
+                        #     np_collected=True
+                        # if (temp_diff > 0.03) and (np_collected==False):
+                        #     coarse_pose = geometry_msgs.msg.Pose()
+                        #     # if  bolt_pose.position.x >0 and  bolt_pose.position.x <0.02 :
+                        #     #     coarse_pose.position.x=0.08
+                               
+                        #     # coarse_pose.position.x = bolt_pose.position.x-0.02
+                        #     # coarse_pose.position.y = bolt_pose.position.y-0.02
+                        #     coarse_pose.position.x = bolt_pose.position.x-0.065
+                        #     coarse_pose.position.y = bolt_pose.position.y         
+                        #     coarse_pose.position.z = 0.65
 
+                        #     # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+                        #     q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+                        #     coarse_pose.orientation.x = q[0]
+                        #     coarse_pose.orientation.y = q[1]
+                        #     coarse_pose.orientation.z = q[2]
+                        #     coarse_pose.orientation.w = q[3]
+
+                        #     planner.next_pose=coarse_pose
+                        #     np_collected=True
+                    if  np_collected==False and (temp_diff_list==[]):
+                        try_new_pose=self.set_global_position()
+                        planner.next_pose=try_new_pose
+                        np_collected=True
                     if (min_diff < 0.015):
                         real_pose=kalman.iteration(near_pose)
                         self.adjust_bolt_frame(real_pose,latest_infos)
@@ -207,7 +281,7 @@ class TrueAimTarget(TrueBase):
             else:
                 if (s==0):
                     curr_pose= self.group.get_current_pose(self.effector).pose
-                try_new_pose=self.adjust_pose_in_world_frame()
+                try_new_pose=self.set_global_position()
                 if not self.set_arm_pose(self.group, try_new_pose, self.effector):
                     print("recovery failed")
                     # curr_pose= self.group.get_current_pose(self.effector).pose

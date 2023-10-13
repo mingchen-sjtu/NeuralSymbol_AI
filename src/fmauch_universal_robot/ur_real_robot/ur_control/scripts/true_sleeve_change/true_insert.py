@@ -39,14 +39,14 @@ class TrueInsert(TrueBase):
         self.is_cramped=False
         self.near_cramped=False
 
-    def get_insert_trajectory(self,real_pose,all_info):
+    def get_insert_trajectory(self,real_pose,all_info,sleeve_type):
 
         trajectory =  [] 
         # radius=0.0015
         radius=0
         delta_angle = 10
         scale_angle = delta_angle * math.pi / 180
-        scale_depth= 0.0015
+        scale_depth= 0.001
         total_ang=40
         print('get_insert_trajectory')
         for i in range( int(total_ang / delta_angle + 1) ):
@@ -59,8 +59,10 @@ class TrueInsert(TrueBase):
             # tgt_pose_in_real_frame.position.y =0.003+tamp_radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.x =-self.x_shift+tamp_radius * math.cos(tamp_angle)
             tgt_pose_in_real_frame.position.y =-self.y_shift+tamp_radius * math.sin(tamp_angle)
-
-            tgt_pose_in_real_frame.position.z = -self.z_shift  + tamp_depth
+            if sleeve_type=='hex_bolt_8':
+                tgt_pose_in_real_frame.position.z = -self.z_shift  + tamp_depth - 0.018
+            else:
+                tgt_pose_in_real_frame.position.z = -self.z_shift  + tamp_depth - 0.009
             q = tf.transformations.quaternion_from_euler(0, 0, 0)
             # q = tf.transformations.quaternion_from_euler(0, 0, 0)           
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -248,7 +250,7 @@ class TrueInsert(TrueBase):
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x = -self.x_shift
         tgt_pose_in_real_frame.position.y = -self.y_shift
-        tgt_pose_in_real_frame.position.z = -self.z_shift - 0.07
+        tgt_pose_in_real_frame.position.z = -self.z_shift - 0.075
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
         tgt_pose_in_real_frame.orientation.x = q[0]
@@ -288,7 +290,7 @@ class TrueInsert(TrueBase):
 
         print(plt.show())
 
-    def action(self, all_info, pre_result_dict,kalman,yolo,plc):
+    def action(self, all_info, pre_result_dict,kalman,yolo,plc,sleeve_type):
         # for param in self.action_params:
         #     if not param in all_info.keys():
         #         print(param, 'must give')
@@ -314,7 +316,7 @@ class TrueInsert(TrueBase):
                 print("failed")
                 print(curr_pose)
             self.print_wrench()
-            insert_trajectory=self.get_insert_trajectory(real_pose,all_info)
+            insert_trajectory=self.get_insert_trajectory(real_pose,all_info,sleeve_type)
             plc.set_effector_star_neg(200)
             rospy.sleep(3)
             for ee_pose in insert_trajectory:

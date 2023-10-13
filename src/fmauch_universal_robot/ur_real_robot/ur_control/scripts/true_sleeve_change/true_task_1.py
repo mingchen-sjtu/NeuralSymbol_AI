@@ -142,6 +142,7 @@ class TSTPlanner:
         # self.sleeve_type=None
         self.sleeve_type="hex_bolt_13"
         self.aim_bolt_type=None
+        self.bolt_is_disassemble=[]
     
     # 编码图片
     def pack_image(self, frame):
@@ -262,7 +263,7 @@ class TSTPlanner:
         return path_list[0]
 
     def start(self,  pose):
-        self.plc_control.set_return_zero()
+        # self.plc_control.set_return_zero()
         if self.action != 'sleep':
             print("Please start after previous task was done!")
             return False
@@ -329,6 +330,8 @@ class TSTPlanner:
                                 self.aim_bolt_type="out_hex_bolt_8"
                             elif self.action=='disassemble' or self.action=='insert':
                                 self.ret_dict = prim.action(infos, self.ret_dict,filter,self.bolt_detector,self.plc_control)
+                            elif self.action=='mate':
+                                self.ret_dict = prim.action(infos, self.ret_dict,filter,self.bolt_detector,self.bolt_is_disassemble)
                             else:
                                 self.ret_dict = prim.action(infos, self.ret_dict,filter,self.bolt_detector)
                             print(self.action+"_is_finished")
@@ -348,6 +351,7 @@ class TSTPlanner:
                                 self.stage[eff]=(prim_dict[self.action].eff)[eff]
                             i = i + 1
                             if self.action=='disassemble':
+                                self.bolt_is_disassemble.append(self.bolt_pose)
                                 filter.release()
                                 filter=Kalman(20)
                                 self.stage={'have_coarse_pose':True, 'above_bolt':False,'target_aim':False, 'target_clear':True,'above_center_c':False,'target_match':False,'cramped':False,'disassembled':False}
@@ -449,10 +453,10 @@ if __name__ == '__main__':
         # pose_target.position.y = 0.38
         # pose_target.position.z = 0.65
 
-        # pose_target.position.x = 0.139
-        pose_target.position.x = 0.662
-        pose_target.position.y = 0.180
-        # pose_target.position.y = 0.428
+        pose_target.position.x = 0.139
+        # pose_target.position.x = 0.662
+        # pose_target.position.y = 0.160
+        pose_target.position.y = 0.888
         # pose_target.position.y = 1.1
         
         pose_target.position.z = 0.65

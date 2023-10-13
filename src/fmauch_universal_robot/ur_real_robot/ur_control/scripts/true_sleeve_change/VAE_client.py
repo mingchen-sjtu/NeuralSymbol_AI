@@ -55,12 +55,14 @@ class VAE_SendImg():
         circlesbox=[]
         circlescenter=[]
         frame_img = Image.fromarray(np.array(img))
-        for bolt in result[0].keys():
-            print('bolt center success')
-            circlescenter.extend(result[0][bolt])
-        for bolt in result[1].keys():
-            print('bolt box success')
-            circlesbox.extend(result[1][bolt])
+        # for bolt in result[0].keys():
+        if 'bolt' in result[0].keys():
+                print('bolt center success')
+                circlescenter.extend(result[0]['bolt'])
+        # for bolt in result[1].keys():
+        if 'bolt' in result[1].keys():
+                print('bolt box success')
+                circlesbox.extend(result[1]['bolt'])
         for bolt_b in circlesbox:
             print(bolt_b)
             crop_image = frame_img.crop(bolt_b)
@@ -86,7 +88,7 @@ class VAE_SendImg():
         aim_bolt=0
         min_dis=100
         for bolt_c in circlescenter:
-            dis=math.sqrt(pow(bolt_c[0] - 436 ,2)+pow(bolt_c[1] - 328 ,2))
+            dis=math.sqrt(pow(bolt_c[0] - 433 ,2)+pow(bolt_c[1] - 236 ,2))
             if dis<min_dis:
                 min_dis=dis
                 aim_bolt=i
@@ -109,23 +111,24 @@ class VAE_SendImg():
             result='in_hex_bolt'
         elif result == 'star_bolt':
             # result='star_bolt'
-            if bolt_size>=30:
+            if bolt_size>=33:
                 result='cross_hex_bolt_13'
-            elif bolt_size>=22:
+            elif bolt_size>=27.0:
                 result='cross_hex_bolt_10'
             else:
                 result='cross_hex_bolt_8'
         elif result == 'out_hex_bolt':
-            if bolt_size>=30:
+            if bolt_size>=33:
                 result='out_hex_bolt_13'
-            elif bolt_size>=24:
-                result='out_hex_bolt_8'
-            else:
+            # elif bolt_size>=33:
+            elif bolt_size>=27.0:
                 result='out_hex_bolt_10'
+            else:
+                result='out_hex_bolt_8'
         elif result == 'cross_hex_bolt':
-            if bolt_size>=30:
+            if bolt_size>=33:
                 result='cross_hex_bolt_13'
-            elif bolt_size>=22:
+            elif bolt_size>=27.0:
                 result='cross_hex_bolt_10'
             else:
                 result='cross_hex_bolt_8'

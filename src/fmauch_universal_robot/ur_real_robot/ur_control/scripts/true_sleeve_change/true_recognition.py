@@ -87,6 +87,7 @@ class TrueRecognition(TrueBase):
             detect_ret=yolo.finish_YOLO_detect(raw_img)
             result = vae.finish_VAE_detect(raw_img,detect_ret)
             bolt_type=result
+            # rospy.sleep(30)
             
             if bolt_type:
                 return {'success': True, 'bolt_type': bolt_type}

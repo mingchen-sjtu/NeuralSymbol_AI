@@ -74,9 +74,9 @@ class TrueDisassemble(TrueBase):
     def get_disassemble_trajectory(self):
 
         trajectory =  [] 
-        scale_depth= 0.01
+        scale_depth= 0.05
         print('get_return_trajectory')
-        for i in range(5):
+        for i in range(1):
             tamp_depth=scale_depth *(i+1)
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
@@ -154,8 +154,8 @@ class TrueDisassemble(TrueBase):
 
         print("start to collect wrench")
         self.collect=True
-        plc.set_effector_star_neg(5000)
-        rospy.sleep(2)
+        plc.set_effector_star_neg(3000)
+        rospy.sleep(1.5)
         self.collect=False
         self.plot()
 
@@ -163,7 +163,7 @@ class TrueDisassemble(TrueBase):
         while True:
             if self.cur_wrench[0,5]<0.25:
                 break 
-        time.sleep(1)
+        time.sleep(2)
         for ee_pose in trajectory:
             if not self.set_arm_pose(self.group, ee_pose, self.effector):
                 print("disassemble failed")

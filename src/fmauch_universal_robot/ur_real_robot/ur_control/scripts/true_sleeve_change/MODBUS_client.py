@@ -25,20 +25,39 @@ class MODBUS_control():
         "225.0":17249,"-135.0":17249,
         "180.0":17204,"-180.0":17204,
         "0.0":0,"360.0":0,
-        "54.0":16984
+        "43.0":16940,"21.0":16808,
+        "30.0":16880,"60.0":17008,
+        "120.0":17136,"150.0":17174
         }
-        self.sleeve_loc={"hex_bolt_8":0,"hex_bolt_10":1,"2":2,"bolt_3":3,"bolt_4":4,"bolt_5":5,"hex_bolt_13":6,"bolt_7":7}
+        self.in_sleeve_loc={"hex_bolt_10":0,"in_bolt_1":1,"hex_bolt_12":2,
+                            "hex_bolt_13":3,"hex_bolt_14":4,"in_bolt_5":5,
+                            "hex_bolt_17":6,"hex_bolt_19":7}
+        self.out_sleeve_loc={"out_bolt_0":0,"hex_bolt_8":1,"out_bolt_2":2,
+                             "out_bolt_3":3,"out_bolt_4":4,"out_bolt_5":5,
+                             "out_bolt_6":6,"out_bolt_7":7,"out_bolt_8":8,
+                             "out_bolt_9":9,"out_bolt_10":10,"out_bolt_11":11}
         self.loc=0
-        self.bolt="1"
+        self.bolt="hex_bolt_14"
         self.NUM_REGISTERS = 3
         self.ADDRESS_READ_START = 0
         self.ADDRESS_WRITE_START = 150
         self.modclient = ModbusWrapperClient(self.host,port=self.port,rate=50,reset_registers=False,sub_topic="modbus_wrapper/output",pub_topic="modbus_wrapper/input")
         self.modclient.setReadingRegisters(self.ADDRESS_READ_START,self.NUM_REGISTERS)
         self.modclient.setWritingRegisters(self.ADDRESS_WRITE_START,self.NUM_REGISTERS)
-    def set_sleeve_angle(self,angle):
-        register = 150
+    def set_sleeve_angle_pos(self,angle):
+        register = 172
         value = angle
+        self.modclient.setOutput(register,value,0)
+        register = 166
+        value = 256
+        self.modclient.setOutput(register,value,0)
+
+    def set_sleeve_angle_neg(self,angle):
+        register = 170
+        value = angle
+        self.modclient.setOutput(register,value,0)
+        register = 166
+        value = 0
         self.modclient.setOutput(register,value,0)
 
     def set_sleeve_rotation(self):
@@ -93,95 +112,151 @@ class MODBUS_control():
         self.modclient.setOutput(register,value,0)
         print("state:",self.modclient.readRegisters(105,1))
 
-    def attach(self,bolt):
+    def in_attach(self,bolt):
         bolt=bolt
         loc=0
-        if self.sleeve_loc[bolt]==7:
-            self.set_sleeve_angle(17204)
-            self.set_sleeve_rotation()      
-            time.sleep(3)
-            self.set_sleeve_angle(17159)
-            self.set_sleeve_rotation()
+        aim=self.in_sleeve_loc[bolt]
+        # print(type(str(aim*45.0)))
+        if aim < 4:
+            value = self.sleeve_ang2reg[str(aim*45.0)]
+            self.set_sleeve_angle_pos(value)
         else:
-            value = self.sleeve_ang2reg[str(self.sleeve_loc[bolt]*45.0)]
-            self.set_sleeve_angle(value)
-            print("angle:",self.modclient.readRegisters(150,1))
-            print("rotation:",self.modclient.readRegisters(152,1))
-            self.set_sleeve_rotation()
-            print("rotation:",self.modclient.readRegisters(152,1))
-        loc=self.sleeve_loc[bolt]
+            value = self.sleeve_ang2reg[str((8-aim)*45.0)]
+            self.set_sleeve_angle_neg(value)
+        print("angle:",self.modclient.readRegisters(150,1))
+        print("rotation:",self.modclient.readRegisters(152,1))
+        self.set_sleeve_rotation()
+        print("rotation:",self.modclient.readRegisters(152,1))
+        loc=aim
         print("attach_loc:",loc)
-        time.sleep(3)
+        time.sleep(2)
     
-    def attach_return(self,bolt):
-        loc=self.sleeve_loc[bolt]
-        if loc==1:
-            self.set_sleeve_angle(17204)
-            self.set_sleeve_rotation()      
-            time.sleep(3)
-            self.set_sleeve_angle(17159)
-            self.set_sleeve_rotation()
+    def in_attach_return(self,bolt):
+        aim=self.in_sleeve_loc[bolt]
+        if aim < 4:
+            value = self.sleeve_ang2reg[str(aim*45.0)]
+            self.set_sleeve_angle_neg(value)
         else:
-            value = self.sleeve_ang2reg[str((8-loc)*45.0)]
-            self.set_sleeve_angle(value)
-            self.set_sleeve_rotation()
+            value = self.sleeve_ang2reg[str((8-aim)*45.0)]
+            self.set_sleeve_angle_pos(value)
+        self.set_sleeve_rotation()
         print("return the staring position")
-        time.sleep(3)
+        time.sleep(2)
 
-    def detach(self,bolt):
+    def in_detach(self,bolt):
         bolt=bolt
-        loc=4
-        if self.sleeve_loc[bolt]==3:
-            self.set_sleeve_angle(17204)
-            self.set_sleeve_rotation()      
-            time.sleep(3)
-            self.set_sleeve_angle(17159)
-            self.set_sleeve_rotation()
+        aim=self.in_sleeve_loc[bolt]
+        if (aim-4) < 4 and (aim-4) >= 0:
+            value = self.sleeve_ang2reg[str((aim-4)*45.0)]
+            self.set_sleeve_angle_pos(value)
         else:
-            value = self.sleeve_ang2reg[str((self.sleeve_loc[bolt]-4)*45.0)]
-            self.set_sleeve_angle(value)
-            self.set_sleeve_rotation()
-        loc=self.sleeve_loc[bolt]
-        print("detach_loc:",loc)
-        time.sleep(3)
-    def detach_return(self,bolt):
-        loc=self.sleeve_loc[bolt]
-        if loc==5:
-            self.set_sleeve_angle(17204)
-            self.set_sleeve_rotation()      
-            time.sleep(3)
-            self.set_sleeve_angle(17159)
-            self.set_sleeve_rotation()
+            value = self.sleeve_ang2reg[str((4-aim)*45.0)]
+            self.set_sleeve_angle_neg(value)
+        self.set_sleeve_rotation()
+        print("detach_loc:",aim)
+        time.sleep(2)
+    def in_detach_return(self,bolt):
+        aim=self.in_sleeve_loc[bolt]
+        loc=aim
+        if (aim-4) < 4 and (aim-4) >= 0:
+            value = self.sleeve_ang2reg[str((aim-4)*45.0)]
+            self.set_sleeve_angle_neg(value)
         else:
-            value = self.sleeve_ang2reg[str((4-loc)*45.0)]
-            self.set_sleeve_angle(value)
-            self.set_sleeve_rotation()
+            value = self.sleeve_ang2reg[str((4-aim)*45.0)]
+            self.set_sleeve_angle_pos(value)
+        self.set_sleeve_rotation()
         print("return the staring position")
-        time.sleep(3)
+        time.sleep(2)
     
-    def set_return_zero(self):
+    def out_attach(self,bolt):
+        bolt=bolt
+        loc=0
+        aim=self.out_sleeve_loc[bolt]
+        # print(type(str(aim*45.0)))
+        if aim < 6:
+            value = self.sleeve_ang2reg[str(aim*30.0)]
+            self.set_sleeve_angle_pos(value)
+        else:
+            value = self.sleeve_ang2reg[str((12-aim)*30.0)]
+            self.set_sleeve_angle_neg(value)
+        print("angle:",self.modclient.readRegisters(150,1))
+        print("rotation:",self.modclient.readRegisters(152,1))
+        self.set_sleeve_rotation()
+        print("rotation:",self.modclient.readRegisters(152,1))
+        loc=aim
+        print("attach_loc:",loc)
+        time.sleep(2)
+    
+    def out_attach_return(self,bolt):
+        aim=self.out_sleeve_loc[bolt]
+        if aim < 6:
+            value = self.sleeve_ang2reg[str(aim*30.0)]
+            self.set_sleeve_angle_neg(value)
+        else:
+            value = self.sleeve_ang2reg[str((12-aim)*30.0)]
+            self.set_sleeve_angle_pos(value)
+        self.set_sleeve_rotation()
+        print("return the staring position")
+        time.sleep(2)
+
+    def out_detach(self,bolt):
+        bolt=bolt
+        aim=self.out_sleeve_loc[bolt]
+        if (aim-6) < 6 and (aim-6) >= 0:
+            value = self.sleeve_ang2reg[str((aim-6)*30.0)]
+            self.set_sleeve_angle_pos(value)
+        else:
+            value = self.sleeve_ang2reg[str((6-aim)*30.0)]
+            self.set_sleeve_angle_neg(value)
+        self.set_sleeve_rotation()
+        print("detach_loc:",aim)
+        time.sleep(2)
+    def out_detach_return(self,bolt):
+        aim=self.out_sleeve_loc[bolt]
+        loc=aim
+        if (aim-6) < 6 and (aim-6) >= 0:
+            value = self.sleeve_ang2reg[str((aim-6)*30.0)]
+            self.set_sleeve_angle_neg(value)
+        else:
+            value = self.sleeve_ang2reg[str((6-aim)*30.0)]
+            self.set_sleeve_angle_pos(value)
+        self.set_sleeve_rotation()
+        print("return the staring position")
+        time.sleep(2)
+
+    def set_return_zero_in(self):
         register = 162
         value = 256
         self.modclient.setOutput(register,value,0)
         print("return_zero")
-        # time.sleep(3)
-        time.sleep(3)
-        self.set_sleeve_angle(16984)
+        time.sleep(2)
+        self.set_sleeve_angle_neg(16940)
+        self.set_sleeve_rotation()
+        time.sleep(1)
+
+    def set_return_zero_out(self):
+        register = 162
+        value = 256
+        self.modclient.setOutput(register,value,0)
+        print("return_zero")
+        time.sleep(2)
+        self.set_sleeve_angle_neg(16808)
         self.set_sleeve_rotation()
         time.sleep(1)
 
 
 if __name__ == '__main__':
     rospy.init_node('plc', anonymous=True)
-    self=MODBUS_control()
-    bolt=self.bolt
-    loc=self.loc
-    # self.set_return_zero()
-    # value = self.sleeve_ang2reg[str(self.sleeve_loc[bolt]*45.0)]
-    # self.set_sleeve_angle(value)
-    # self.set_sleeve_rotation()
-    # loc+=self.sleeve_loc[bolt]
-    # print("loc:",loc)
+    plc_control=MODBUS_control()
+    bolt=plc_control.bolt
+    loc=plc_control.loc
+    plc_control.set_return_zero_in()
+    # plc_control.in_attach(bolt)
+    # plc_control.in_attach_return(bolt)
+    plc_control.set_return_zero_out()
+    plc_control.set_return_zero_in()
+    # plc_control.out_attach(bolt)
+    # plc_control.out_attach_return(bolt)
 
     # time.sleep(3)
 
@@ -199,12 +274,12 @@ if __name__ == '__main__':
     #     self.set_sleeve_rotation()
     # print("return the staring position")
 
-    self.set_effector_star_neg(4000)
-    time.sleep(2)
-    self.read_effector_speed()
-    self.read_effector_state()
-    time.sleep(2)
-    self.read_effector_speed()
-    self.read_effector_state()
-    time.sleep(5)
-    self.set_effector_stop()
+    # plc_control.set_effector_star_neg(4000)
+    # time.sleep(2)
+    # plc_control.read_effector_speed()
+    # plc_control.read_effector_state()
+    # time.sleep(2)
+    # plc_control.read_effector_speed()
+    # plc_control.read_effector_state()
+    # time.sleep(5)
+    # plc_control.set_effector_stop()

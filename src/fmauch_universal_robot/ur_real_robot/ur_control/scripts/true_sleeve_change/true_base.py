@@ -52,7 +52,7 @@ class TrueBase(object):
         self.bolt_pos_pub = rospy.Publisher('/NSPlanner/bolt_pose', geometry_msgs.msg.PoseStamped, queue_size =10 )
         self.x_shift= 0.00061
         self.y_shift= -0.002
-        self.z_shift= 0.48702
+        self.z_shift= 0.58702
     def print_pose(self,pose):
         q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
         rpy = tf.transformations.euler_from_quaternion(q)
