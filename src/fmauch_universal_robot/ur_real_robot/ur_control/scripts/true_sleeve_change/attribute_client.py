@@ -153,7 +153,7 @@ class attribute_SendImg():
 if __name__ == '__main__':
     bolt_type_detector = attribute_SendImg()
     # frame = cv2.imread('src/ur_real_robot/YOLO_v5_detect/imgs/img_decode_2.jpg')
-    frame = cv2.imread('/home/xps/Desktop/yolo/VOC2007/JPEGImages/298.jpg')
+    frame = cv2.imread('/home/xps/Desktop/yolo/VOC2007/JPEGImages/295.jpg')
     frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
     result = bolt_type_detector.bolt_detector.finish_YOLO_detect(frame)
     result = bolt_type_detector.finish_attribute_detect(frame,result)

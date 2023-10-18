@@ -64,18 +64,27 @@ def infer_checkpoint(img):
             {'op':'filter_nearest_obj', 'param': ''},
             {'op':'obj_attibute', 'param':attribute_in2index[attribute_in_dic[i]]}
         ]
+        # in_op_list = [
+        #     {'op': 'objects', 'param': ''},
+        #     {'op':'filter_nearest_obj', 'param': ''},
+        #     {'op':'obj_attibute', 'param':0}
+        # ]
         out_op_list = [
             {'op': 'objects', 'param': ''},
             {'op':'filter_nearest_obj', 'param': ''},
             {'op':'obj_attibute', 'param':attribute_out2index[attribute_out_dic[i]]}
         ]
         img_file_path=""
-        y_pred_in = attribute_in_model(in_op_list, img,img_file_path, mode='test')
-        if y_pred_in[0].data==1:
-            attribute_in[i]=1
-        y_pred_out = attribute_out_model(out_op_list, img,img_file_path, mode='test')
-        if y_pred_out[0].data==1:
-            attribute_out[i]=1
+        # y_pred_in = attribute_in_model(in_op_list, img,img_file_path, mode='test')
+        # if y_pred_in[0].data==1:
+        #     attribute_in[i]=1
+        # y_pred_out = attribute_out_model(out_op_list, img,img_file_path, mode='test')
+        # if y_pred_out[0].data==1:
+        #     attribute_out[i]=1
+        y_pred_in = attribute_in_model(in_op_list, img,img_file_path, mode='infer')
+        attribute_in[i]=y_pred_in[0].data
+        y_pred_out = attribute_out_model(out_op_list, img,img_file_path, mode='infer')
+        attribute_out[i]=y_pred_out[0].data
     print("attribute_in:",attribute_in,"attribute_out:",attribute_out)
     return attribute_in,attribute_out
 

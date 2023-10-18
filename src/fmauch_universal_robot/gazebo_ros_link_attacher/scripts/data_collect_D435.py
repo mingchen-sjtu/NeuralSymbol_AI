@@ -68,7 +68,7 @@ while True:
     # 输入空格保存图片
     elif k == ord(' '):
         i = i + 1
-        cv2.imwrite(os.path.join("/home/xps/Desktop/yolo/bolt_data_hole", str(i) + '.jpg'), color_img)
+        cv2.imwrite(os.path.join("/home/xps/Desktop/yolo/bolt_data_ww", str(i) + '.jpg'), color_img)
         print("RGB Frames{} Captured".format(i))
         # with open('D:\\Realsense\\pic_capture\\' + str(i) + "_d.jpg", 'wb') as f:
         #     writer = png.Writer(width=depth_data.shape[1], height=depth_data.shape[0],

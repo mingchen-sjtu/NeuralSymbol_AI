@@ -395,6 +395,7 @@ def infer_checkpoint(model,atribute_in):
         #     continue
         # print('[INFO]---case', img_id, '----')
         img_file_path = DATA_INPUT + attribute_in2bolt[atribute_in]+'/' + str(img_id).zfill(3) + '.jpg'
+        # img_file_path = "/home/xps/Desktop/ur10e_sim/src/fmauch_universal_robot/ur_real_robot/bolt_attribute_reasoning/data-end2end-triple/true_mul_bolt_crops/out_hex_bolt/547.jpg"
         # ann_file = DATA_INPUT + 'Annotation/shut-' + str(img_id).zfill(3) + '.xml'
         # print(img_file)
         img = imgtool.load_img(img_file_path)

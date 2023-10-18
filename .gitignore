@@ -3,5 +3,9 @@
 *.pyc
 *.csv
 *.png
+*.jpg
+*.pt
+*.pth
+*.pkl
 ./.idea/
 .vscode/

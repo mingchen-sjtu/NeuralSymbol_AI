@@ -595,7 +595,7 @@ class Executor(nn.Module):
         # # 2 dim is for 'balance' concept
         # for obj_index in range(min(max_obj_num, len(ann))):
         #     concept_matrix[2][0][obj_index] = 1
-        # print("concept_matrix:",concept_matrix)
+        print("concept_matrix:",concept_matrix)
 
         return concept_matrix
 
