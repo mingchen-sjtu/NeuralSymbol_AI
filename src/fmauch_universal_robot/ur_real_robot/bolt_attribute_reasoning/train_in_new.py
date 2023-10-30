@@ -22,9 +22,9 @@ from crop_pic_sin import crop_and_filter_objects
 
 from models.rel_models import OnClassify_v1
 # from demo import ImageTool
-from models.reasoning_out_base_in import Reasoning
-from models.reasoning_out_base_in import id2rel
-from models.reasoning_out_base_in import ImageTool
+from models.reasoning_out_and_in import Reasoning
+from models.reasoning_out_and_in import id2rel
+from models.reasoning_out_and_in import ImageTool
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.tensorboard import SummaryWriter
 from torchvision.transforms import transforms
@@ -108,13 +108,13 @@ def get_args_parser():
 
 def train(model):
 
-    train_set = TripleDataset(DATA_INPUT + 'attribute_out_base_in_train.tsv')
-    test_set = TripleDataset(DATA_INPUT + 'attribute_out_base_in_test.tsv')  # use triple
+    train_set = TripleDataset(DATA_INPUT + 'attribute_in_train.tsv')
+    test_set = TripleDataset(DATA_INPUT + 'attribute_in_test.tsv')  # use triple
 
     lr = 0.001
     epoch_num = 100
-    # loss_function = nn.MSELoss()
-    loss_function = nn.CrossEntropyLoss()
+    loss_function = nn.MSELoss()
+    # loss_function = nn.CrossEntropyLoss()
     # loss_function = nn.BCELoss()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -156,127 +156,54 @@ def train(model):
         FN = 0
         best_score = 0.3
         for i in index_list:
-            (img, op_list, answer, type,img_file_path) = train_set[i]
-            # print(op_list)
-            # print(op_list)
-            optimizer.zero_grad()
-            # start_time = time.time()
-            # print("start time begin")
-            y_pred = model(op_list, img,img_file_path, mode='train')
-            # y_pred = nn.functional.softmax(y_pred,dim=1)
+            (img, op_lists, answers,img_file_path) = train_set[i]
+            for i in range(4):
+                optimizer.zero_grad()
+                # start_time = time.time()
+                # print("start time begin")
+                y_pred = model(op_lists[i], img,img_file_path, mode='train')
+                model.concept_matrix2zero()
+                
 
-            # dot = make_dot(y_pred, params=dict(model.named_parameters()))
-            # dot.format = 'png'
-            # dot.render(filename='my_graph')
-            # writer = SummaryWriter(log_dir='logs_g')
-            # writer.add_graph(model, (op_list, img, ann, name_t))
-            # writer.close()
+                loss = loss_function(y_pred, answers[i])
 
-            # loss = loss_function(y_pred.to(device, torch.float), answer.to(device, torch.float))
-            loss = loss_function(y_pred, answer)
-
-            # print("answer:",answer)
-            # print("y_pred:",y_pred)
-            # print("loss:",loss)
-            loss.requires_grad_(True)
-
-            # make_dot(loss).view()
-            # dot = make_dot(loss)
-            # dot.format = 'png'
-            # dot.render(filename='my_graph')
-
-            # for name, parms in model.named_parameters():
-            #     print('-->name:', name, '-->grad_requirs:', parms.requires_grad, ' -->grad_value:', parms.grad)
-
-            # if answer.sum() >= 1:
-            #     loss_pos += loss
-            #     train_pos_cnt += 1
-            #     ans_pos += answer.sum()
-            # else:
-            #     loss_neg += loss
-            #     train_neg_cnt += 1
-            #     ans_neg += answer.sum()
-                # continue
-
-            train_loss += loss.data
-            # print('[INFO] result:', y_pred,'(GT:', answer)
-            # print(loss)
-            loss.backward()
-            optimizer.step()
-
-            # end_time = time.time()
-            # run_time = end_time - start_time
-            # run_time = str(run_time)
-            # print("run-time = " + run_time)
+                loss.requires_grad_(True)
+                train_loss += loss.data
+                loss.backward()
+                optimizer.step()
 
         # ------------------- test model ---------------
         # test_set = train_set
         for i in range(test_set.len):
-            (img, op_list, answer, type,img_file_path) = test_set[i]
-            y_pred = model(op_list, img,img_file_path, mode='train')
-            loss = loss_function(y_pred, answer)
+            (img, op_lists, answers,img_file_path) = test_set[i]
+            for i in range(4):
+                y_pred = model(op_lists[i], img,img_file_path, mode='train')
+                model.concept_matrix2zero()
+                loss = loss_function(y_pred, answers[i])
+                test_loss += loss.data
+                y_pred = model(op_lists[i], img,img_file_path,  mode='test')
+                model.concept_matrix2zero()
+                print(y_pred)
 
-            # pred_tot += y_pred.sum().data
-            # print(answer, answer.sum())
-            # if answer.sum() >= 1:
-            #     pred_pos += y_pred.sum().data
-            #     test_pos_cnt += 1
-            # else:
-            #     pred_neg += y_pred.sum().data
-            #     test_neg_cnt += 1
-
-            test_loss += loss.data
-
-            y_pred = model(op_list, img,img_file_path,  mode='test')
+                print(answers[i])
             # acc compute
-            if y_pred.equal(answer) :
-                acc += 1
-            # if ((y_pred - answer).sum() == 0 and answer.sum() == 1):
-            #     acc += 1
-            #     acc_pos += 1
-            # if ((y_pred - answer).sum() == 0 and answer.sum() == 0):
-            #     acc += 1
-            #     acc_neg += 1
-            # P R F1 compute
-        #     if (y_pred.sum().data == 1):
-        #         if (answer.sum() == 1):
-        #             TP += 1
-        #         else:
-        #             FP += 1
-        #     else:
-        #         if (answer.sum() == 1):
-        #             FN += 1
-        #         else:
-        #             TN += 1
-        # if TP + FP == 0:
-        #     P = 0
-        # else:
-        #     P = TP / (TP + FP)
-        # print(P)
-        # if TP + FN == 0:
-        #     R = 0
-        # else:
-        #     R = TP / (TP + FN)
-        # print(R)
-        # if P + R == 0:
-        #     F1 = 0
-        # else:
-        #     F1 = (2 * P * R) / (P + R)
+                if y_pred.equal(answers[i]) :
+                    acc += 1
 
 
         # print('[INFO] pos cnt', train_pos_cnt, 'neg cnt', train_neg_cnt)
         # print('[INFO] pos ans', ans_pos, 'neg ans', ans_neg)
         print('[INFO] ---train---')
-        print('[INFO]---- train loss ----:', train_loss / train_set.len)
+        print('[INFO]---- train loss ----:', train_loss /( train_set.len*4))
         # print('[INFO]---- train pos loss ----:', loss_pos / train_pos_cnt)
         # print('[INFO]---- train neg loss ----:', loss_neg / train_neg_cnt)
         print('[INFO] ---test---')
         # print('[INFO]---- pred avg ----:', pred_tot / test_set.len)
         # print('[INFO]---- pred avg pos----:', pred_pos / test_pos_cnt)
         # print('[INFO]---- pred avg neg----:', pred_neg / test_neg_cnt)
-        print('[INFO]---- test loss ----:', test_loss / test_set.len)
+        print('[INFO]---- test loss ----:', test_loss / (test_set.len*4))
         print('[INFO] ---eval---')
-        print('[INFO]---- test acc ----:', acc / test_set.len)
+        print('[INFO]---- test acc ----:', acc / (test_set.len*4))
         # print('[INFO]---- test acc pos----:', acc_pos / test_pos_cnt)
         # print('[INFO]---- test acc neg----:', acc_neg / test_neg_cnt)
         # print('[INFO]---- test P ----:', P)
@@ -284,10 +211,10 @@ def train(model):
         # print('[INFO]---- test F1 ----:', F1)
 
         # if F1 >= best_score:
-        if acc / test_set.len >= best_score:
+        if acc / (test_set.len*4) >= best_score:
 
             # best_score = round(F1, 2)
-            best_score = round(acc / test_set.len, 2)
+            best_score = round(acc / (test_set.len*4), 4)
             name_str = './checkpoint/reason_model_zero_best_4neg.pkl'.replace('best', str(best_score))
             torch.save(model, name_str)
             # infer_checkpoint(model)
@@ -295,9 +222,9 @@ def train(model):
 
 
 def iii():
-    attribute_in_dic={0:'hex',1:'round',2:'other1',3:'other2'}
+    attribute_in_dic={0:'plane',1:'hex_groove',2:'cross_groove',3:'star_groove'}
     # model = torch.load('./checkpoint/reason_model_zero_1.0_4neg.pkl', map_location=torch.device(device))
-    model = torch.load('./checkpoint/4_97.pkl',map_location=torch.device(device))
+    model = torch.load('./checkpoint/net_in_0.9862.pkl',map_location=torch.device(device))
     for i in range(len(attribute_in_dic)):
 
         infer_checkpoint(model,attribute_in_dic[i])
@@ -376,14 +303,15 @@ def infer_checkpoint(model,atribute_in):
     #         {'op':'exist', 'param': ''},
     # ]
 
-    op_list = [
-            {'op': 'objects', 'param': ''},
-            {'op':'filter_nearest_obj', 'param': ''},
-            {'op':'obj_attibute', 'param': ''}
-    ]
+    
 
     attribute_in2bolt={'plane':'out_hex_bolt','hex_groove':'in_hex_bolt','cross_groove':'cross_hex_bolt','star_groove':'star_bolt'}
     attribute_in2index={'plane':2,'hex_groove':1,'cross_groove':0,'star_groove':3}
+    op_list = [
+            {'op': 'objects', 'param': ''},
+            {'op':'filter_nearest_obj', 'param': ''},
+            {'op':'obj_attibute', 'param': [0,attribute_in2index[atribute_in]]}
+    ]
     img_list = list(range(400, 430))
     # img_list = [1]
     print('[INFO]---------- 评分测试 ---------')
@@ -397,19 +325,29 @@ def infer_checkpoint(model,atribute_in):
         # ann_file = DATA_INPUT + 'Annotation/shut-' + str(img_id).zfill(3) + '.xml'
         # print(img_file)
         img = imgtool.load_img(img_file_path)
-        y_pred = model(op_list, img,img_file_path, mode='infer')
-        max_val,index = torch.max(y_pred,dim=1)
+        # img_file_path=""
+        y_pred = model(op_list, img,img_file_path, mode='test')
+        model.concept_matrix2zero()
+        # max_val,index = torch.max(y_pred,dim=1)
         # print(index)
         tol_num+=1
-        if index[0].data==attribute_in2index[atribute_in]:
+        print( y_pred[0].data)
+        if y_pred[0].data==1:
             val_num+=1
         # print('[INFO] image:', img_id, 'attribute',y_pred)
     print('[INFO] attributu', atribute_in,'total num:', tol_num, 'correct num',val_num, 'accuracy',val_num/tol_num)
+    # img_file_path ="/home/ur/Desktop/attribute_infer/bolt/data-end2end-triple/true_mul_bolt_crops/in_hex_bolt/003.jpg"
+
+    # img = imgtool.load_img(img_file_path)
+
+    # y_pred = model(op_list, img,img_file_path, mode='test')
+    
+    # print( y_pred[0].data)
 
 class TripleDataset(Dataset):
     def __init__(self, file):
 
-        self.eye_matrix = torch.eye(1)
+        # self.eye_matrix = torch.eye(1)
         self.imgtool = ImageTool()
 
         # with open(file) as f:
@@ -475,15 +413,19 @@ class TripleDataset(Dataset):
             attribute_list[0][triple[1]]=1
             attribute_list=torch.reshape(attribute_list, (1, -1))
             # print(" attribute_list:", attribute_list)
-            question = {
-                "image_path": triple[0],
-                "op_list": [
-                    {"op": "objects", "param": ""},  # 获取所有物体
-                    {"op": "filter_nearest_obj", "param": ""},  # 找到最近的物体
-                    {"op": "obj_attibute", "param": triple[1]}],  # 通过filter判定该物体是否是triple中subject物体
-                "answer": attribute_list,  # 答案就是triple中的subject
-                "type": "index"
-            }
+            question =[] 
+            for i in range(4):
+                answer=torch.zeros((1))
+                answer[0]=attribute_list[0][i]
+                q={
+                    "image_path": triple[0],
+                    "op_list": [
+                        {"op": "objects", "param": ""},  # 获取所有物体
+                        {"op": "filter_nearest_obj", "param": ""},  # 找到最近的物体
+                        {"op": "obj_attibute", "param":[0,i]}],  # 通过filter判定该物体是否是triple中subject物体
+                    "answer": answer,  # 答案就是triple中的subject
+                }
+                question.append(q)
             questions_pos.append(question)
 
         #questions_neg = []
@@ -505,37 +447,22 @@ class TripleDataset(Dataset):
         self.len = len(self.questions)
 
     def __getitem__(self, index):
-        img_path = self.questions[index]['image_path']
+        img_path = self.questions[index][0]['image_path']#取出第一个op_list的图像作为图像
 
         img_file_path = DATA_INPUT + img_path
         # ann_file = DATA_INPUT + 'Annotation/shut-' + str(img_id).zfill(3) + '.xml'
         # print(img_file)
         img = imgtool.load_img(img_file_path)
-        op_list = self.questions[index]['op_list']
-        type = self.questions[index]['type']
+        op_lists=[]
+        for i in range(4):
+            op_list = self.questions[index][i]['op_list']
+            op_lists.append(op_list)
+        answers=[]
+        for i in range(4):
+            answer =self.questions[index][i]['answer']
+            answers.append(answer)
 
-        # name_t = 'shut-' + str(img_id).zfill(3)
-
-        if type == "index_neg":
-            answer = torch.zeros(60)  # 构建一个所有物体都不被选中为0的向量
-        else:
-            # answer = self.eye_matrix[self.questions[index]['answer']] # 构建一个仅有答案obj为1其他均为0的向量
-            answer = self.questions[index]['answer']
-        # pic = '/yq/ddd/intel_amm_2/data-end2end-triple/images/shut-' + str(img_id).zfill(3) + '.jpg'
-        # xml_path = '/yq/ddd/intel_amm_2/data-end2end-triple/Annotation/shut-' + str(img_id).zfill(3) + '.xml'
-        # crop_and_filter_objects(pic, xml_path)
-
-        # id_a = None
-        # id_b = None
-
-        # for opi in op_list:
-        #     if opi['op'] == 'filter_index':
-        #         if id_a is None:
-        #             id_a = opi['param']
-        #         else:
-        #             id_b = opi['param']
-
-        return (img, op_list, answer, type,img_file_path)
+        return (img, op_lists, answers,img_file_path)
 
 
     # def __getitem__(self, index):
@@ -581,9 +508,10 @@ if __name__ == "__main__":
     args = get_args_parser()
     args = args.parse_args()
     # Model Load
-    model_out_base_in = Reasoning(args)
-    for name, param in model_out_base_in.named_parameters():
-        print(name, param.size(), type(param))
-    train(model_out_base_in) # 训练流程
+    # model_in = Reasoning(args)
+    # for name, param in model_in.named_parameters():
+    #     print(name, param.size(), type(param))
+    # model_in = torch.load('./checkpoint/net_new_in_img_98.pkl',map_location=torch.device(device))
+    # train(model_in) # 训练流程
     
     iii()  # 测试流程
