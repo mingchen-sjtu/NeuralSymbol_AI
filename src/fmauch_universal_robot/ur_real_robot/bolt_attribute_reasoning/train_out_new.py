@@ -166,8 +166,8 @@ def train(model):
                 
 
                 loss = loss_function(y_pred, answers[i])
-
                 loss.requires_grad_(True)
+                # make_dot(loss).view()
                 train_loss += loss.data
                 loss.backward()
                 optimizer.step()
@@ -239,7 +239,7 @@ def infer_checkpoint(model,atribute_out):
             {'op':'filter_nearest_obj', 'param': ''},
             {'op':'obj_attibute', 'param': [1,attribute_out2index[atribute_out]]}
     ]
-    img_list = list(range(400, 450))
+    img_list = list(range(408, 409))
     # img_list = [1]
     print('[INFO]---------- 评分测试 ---------')
     tol_num=0

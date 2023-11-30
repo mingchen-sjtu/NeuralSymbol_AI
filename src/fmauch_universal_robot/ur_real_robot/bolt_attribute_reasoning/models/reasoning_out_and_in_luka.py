@@ -12,6 +12,8 @@ import time
 from crop_pic_sin import crop_and_filter_objects
 from models.vit_attribute_model import OnClassify_v3
 from models.vit_attribute_model_2 import OnClassify_v3_2
+from models.luka_and import net_and
+
 
 from models.models_vit import VisionTransformer
 
@@ -93,8 +95,8 @@ class Reasoning(nn.Module):
                 # continue
             elif op == 'filter_nearest_obj':
                 buffer.append(exec.filter_nearest_obj(buffer[-1]))
-            elif op == 'obj_attibute':
-                buffer.append(exec.obj_attibute(buffer[-1], param[0],param[1]))
+            elif op == 'obj_attibute_and':
+                buffer.append(exec.obj_attibute_and(buffer[-1], param[0],param[1]))
             elif op == 'attibute2sleeve':
                 buffer.append(exec.attibute2sleeve(buffer[-1], param))
             elif op == 'filter_name':
@@ -159,6 +161,7 @@ class Predicator(nn.Module):
         super(Predicator, self).__init__()
         self.net_in = OnClassify_v3(args)
         self.net_out = OnClassify_v3_2(args)
+        self.in_and_out=net_and()
     def attributes_classify(self, img,img_file_path):
         transform = transforms.Compose([
             transforms.Resize((224, 224)),
@@ -169,7 +172,7 @@ class Predicator(nn.Module):
             transforms.Resize((224, 224)),
         ])
         pic_ten_1 = transform_1(img)
-        pic_ten_1.show()
+        # pic_ten_1.show()
         pic_ten = transform(img)
        
         pic_ten = pic_ten.unsqueeze(0)
@@ -396,26 +399,40 @@ class Executor(nn.Module):
         '''
         mask = selected * 1
         return mask
-    def obj_attibute(self, selected,attribute_index,concept_index):
-        '''
-        '''
-        # attibute_vec=torch.zeros(4)
-        # i=0
-        # for attritube_index in range(min(max_attribute_num, len(attribute2id))):
-        #     for concept_index in range(min(max_concept_num, len(concept2id_name[attritube_index]))):
-        #         attibute_vec[i]= self._get_concept_obj_mask(attritube_index,concept_index,selected)
-        #         i+=1
+    # def obj_attibute(self, selected,attribute_index,concept_index):
+    #     '''
+    #     '''
+    #     # attibute_vec=torch.zeros(4)
+    #     # i=0
+    #     # for attritube_index in range(min(max_attribute_num, len(attribute2id))):
+    #     #     for concept_index in range(min(max_concept_num, len(concept2id_name[attritube_index]))):
+    #     #         attibute_vec[i]= self._get_concept_obj_mask(attritube_index,concept_index,selected)
+    #     #         i+=1
         
-        # for con_index in range(4):
-        #         attibute_vec[i]= self._get_concept_obj_mask(0,con_index,selected)
-        #         i+=1
-        # attibute_vec=torch.reshape(attibute_vec, (1, -1))
+    #     # for con_index in range(4):
+    #     #         attibute_vec[i]= self._get_concept_obj_mask(0,con_index,selected)
+    #     #         i+=1
+    #     # attibute_vec=torch.reshape(attibute_vec, (1, -1))
 
-        mask= self._get_concept_mask(attribute_index,concept_index)
-        mask = selected * mask
-        # attibute_vec=torch.zeros(4)
-        # attibute_vec[concept_index]=mask[0].data
-        # attibute_vec=torch.reshape(attibute_vec, (1, -1))
+    #     mask= self._get_concept_mask(attribute_index,concept_index)
+    #     mask = selected * mask
+    #     # attibute_vec=torch.zeros(4)
+    #     # attibute_vec[concept_index]=mask[0].data
+    #     # attibute_vec=torch.reshape(attibute_vec, (1, -1))
+    #     return mask
+    
+    def obj_attibute_and(self, selected,concept_in_index,concept_out_index):
+        '''
+        '''
+
+        mask1= self._get_concept_mask(0,concept_in_index).to(device, torch.float)
+        mask2= self._get_concept_mask(1,concept_out_index).to(device, torch.float)
+        # print(mask1)
+        # print(mask2)
+
+        and_ans= torch.ones(max_obj_num, requires_grad=False) 
+        and_ans[0]=self.predicator.in_and_out(mask1,mask2,concept_in_index,concept_out_index)[0]
+        mask = selected *and_ans
         return mask
     def exist(self, selected):
         '''
@@ -478,7 +495,7 @@ class Executor(nn.Module):
         # # 2 dim is for 'balance' concept
         # for obj_index in range(min(max_obj_num, len(ann))):
         #     concept_matrix[2][0][obj_index] = 1
-        # print("concept_matrix:",concept_matrix)
+        print("concept_matrix:",concept_matrix)
 
         return concept_matrix
 
